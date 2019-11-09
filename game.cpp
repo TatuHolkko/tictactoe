@@ -56,7 +56,31 @@ void link_grid(vector<vector<Cell>>& board, int size){
     }
 }
 
-Game::Game(int size): size_(size)
+//return how many units of <value> lie next to each other
+//in a straight line parallel to <direction> strarting from <start>
+int count_chain(const Cell& start, Cell::Direction direction, int value){
+    Cell::Direction opposite = (direction + 4) % 8;
+    int chain = 1;
+    Cell* current = start.next(direction);
+
+    while(current != nullptr){
+        if (current->get_value() == value){
+            chain++;
+        }
+        current = current->next(direction);
+    }
+    //check in the opposite direction
+    current = start.next(opposite);
+    while(current != nullptr){
+        if (current->get_value() == value){
+            chain++;
+        }
+        current = current->next(opposite);
+    }
+    return chain;
+}
+
+Game::Game(int size, int win): size_(size), win_(win)
 {
     board_ = {};
     //initialize grid with no links
@@ -70,6 +94,34 @@ Game::Game(int size): size_(size)
     }
     link_grid(board_, size);
 }
+
+Game::State Game::get_state(){
+    return state_;
+}
+
+void Game::update_state(const int placed_unit, const int x, const int y){
+    Cell* placed_cell = get_cell(x, y);
+    //check chain lenghts in all directions
+    if (       count_chain(placed_cell, Cell::right, placed_unit)       >= win_
+            || count_chain(placed_cell, Cell::down_right, placed_unit)  >= win_
+            || count_chain(placed_cell, Cell::down, placed_unit)        >= win_){
+
+        if (placed_unit == 1){
+            return player1_win;
+        } else {
+            return player2_win;
+        }
+    } else {
+        if (length < size*size){
+            return ongoing;
+        } else {
+            //no free space left
+            return tied;
+        }
+    }
+}
+
+
 
 Cell* Game::get_cell(int x, int y){
     return &board_.at(y).at(x);
