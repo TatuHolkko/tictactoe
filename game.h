@@ -13,6 +13,8 @@ public:
     int size_ = 0;
     //return game state as an enumerator of type State
     void get_state();
+    //print the board
+    void print();
 
 private:
 

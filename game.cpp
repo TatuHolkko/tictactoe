@@ -1,5 +1,9 @@
 #include "game.h"
 #include "cell.h"
+#include <vector>
+#include <iostream>
+
+using namespace std;
 
 vector<vector<Cell*>> link_grid(int size){
     //initialize grid with no links
@@ -68,6 +72,15 @@ vector<vector<Cell*>> link_grid(int size){
 Game::Game(int size): size_(size)
 {
     board_ = link_grid(size);
+}
+
+void Game::print(){
+    for (vector<Cell*> row : board_){
+        for (Cell* cell : row){
+            cout << " " << cell->get_value();
+        }
+        cout << endl;
+    }
 }
 
 bool Game::place(int unit, int x, int y){

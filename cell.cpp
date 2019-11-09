@@ -1,6 +1,6 @@
 #include "cell.h"
 
-Cell::Cell()
+Cell::Cell(): value_(0)
 {
 }
 

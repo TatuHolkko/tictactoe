@@ -25,10 +25,10 @@ public:
     void set_value(int value);
 
 private:
+    //value representing an empty space with zero and a unit with any other value
+    int value_;
     //array of pointers to the neighboring cells
     Cell* neighbors_[8] = {nullptr};
-    //value representing an empty space with zero and a unit with any other value
-    int value_ = 0;
 };
 
 #endif // CELL_H
