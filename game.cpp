@@ -18,6 +18,7 @@ vector<vector<Cell*>> link_grid(int size){
         //loop through all cells
         for (int y = 0; y < size; y++){
             for (int x = 0; x < size; x++){
+                //coordinates of the neighbor cell
                 int x2 = x;
                 int y2 = y;
                 switch (dir){
@@ -53,7 +54,7 @@ vector<vector<Cell*>> link_grid(int size){
                         break;
                 }
                 //ignore coordinates not in the grid
-                if (y2 < 0 || y2 >= size || x2 == 0 || x2 >= size){
+                if (y2 < 0 || y2 >= size || x2 < 0 || x2 >= size){
                     continue;
                 }
                 Cell neighbor = *(result.at(y2).at(x2));
