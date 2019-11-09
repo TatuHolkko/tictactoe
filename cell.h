@@ -13,7 +13,7 @@ public:
     Cell();
     //neighbor directions
     enum Direction{
-        up, up_right, right, down_rigth, down, down_left, left, up_left
+        up, up_right, right, down_right, down, down_left, left, up_left
     };
     //get a pointer to a cell next to this cell in the given direction
     Cell* next(Direction dir);

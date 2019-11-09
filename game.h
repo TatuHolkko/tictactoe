@@ -1,5 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
+#include "cell.h"
 #include <vector>
 
 using namespace std;
@@ -15,8 +16,8 @@ public:
 
 private:
 
-    //grid where the units are represented as integers
-    vector<vector<int>> board_;
+    //grid where the units are represented as Cell objects
+    vector<vector<Cell*>> board_;
 
     /* place a unit into the board
      * return true if the move was legal and executed
