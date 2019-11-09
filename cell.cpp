@@ -8,7 +8,7 @@ Cell* Cell::next(Direction dir){
     return neighbors_[dir];
 }
 
-void Cell::link(Direction dir, Cell &neighbor){
+void Cell::link(Direction dir, Cell& neighbor){
     neighbors_[dir] = &neighbor;
 }
 
