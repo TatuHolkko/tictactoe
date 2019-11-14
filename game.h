@@ -10,10 +10,10 @@ class Game
 public:
     //the game is always in one of these states
     enum State{
+        ongoing,
         player1_win,
         player2_win,
-        tied,
-        ongoing
+        tied
     };
 
     Game(int size, int win);

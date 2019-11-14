@@ -1,5 +1,3 @@
-#include "gridhelper.h"
-
 void link_grid(vector<vector<Cell>>& board, int size){
     //link neigbors one direction at a time
     for (int dir = Cell::up; dir <= Cell::up_left; dir++){
