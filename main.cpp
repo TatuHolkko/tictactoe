@@ -1,6 +1,5 @@
 #include <iostream>
-#include "game.h"
-#include "cell.h"
+#include "game/game.h"
 
 using namespace std;
 

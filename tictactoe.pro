@@ -4,10 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    game.cpp \
-    cell.cpp \
-    gridhelper.cpp
+    game/game.cpp \
+    game/cell.cpp \
+    game/gridhelper.cpp
 
 HEADERS += \
-    game.h \
-    cell.h
+    game/game.h \
+    game/cell.h
