@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-    Game gm = Game(2);
+    Game gm = Game(2, 3);
     gm.print();
     Cell* c = gm.get_cell(0,0);
     Cell* c2 = c->next(Cell::down);

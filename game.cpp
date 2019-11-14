@@ -1,6 +1,6 @@
 #include "game.h"
 #include "cell.h"
-#include "gridhelper.h"
+#include "gridhelper.cpp"
 #include <vector>
 #include <iostream>
 
@@ -26,12 +26,12 @@ Game::State Game::get_state(){
     return state_;
 }
 
-void Game::update_state(const int placed_unit, const int x, const int y){
+Game::State Game::update_state(const int placed_unit, const int x, const int y){
     Cell* placed_cell = get_cell(x, y);
     //check chain lenghts in all directions
-    if (       count_chain(placed_cell, Cell::right, placed_unit)       >= win_
-            || count_chain(placed_cell, Cell::down_right, placed_unit)  >= win_
-            || count_chain(placed_cell, Cell::down, placed_unit)        >= win_){
+    if (       count_chain(*placed_cell, Cell::right, placed_unit)       >= win_
+            || count_chain(*placed_cell, Cell::down_right, placed_unit)  >= win_
+            || count_chain(*placed_cell, Cell::down, placed_unit)        >= win_){
 
         if (placed_unit == 1){
             return player1_win;
@@ -39,7 +39,7 @@ void Game::update_state(const int placed_unit, const int x, const int y){
             return player2_win;
         }
     } else {
-        if (length < size*size){
+        if (length < size_*size_){
             return ongoing;
         } else {
             //no free space left

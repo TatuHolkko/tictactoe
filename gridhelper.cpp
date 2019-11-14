@@ -53,8 +53,8 @@ void link_grid(vector<vector<Cell>>& board, int size){
 
 
 
-int count_chain(const Cell& start, Cell::Direction direction, int value){
-    Cell::Direction opposite = (direction + 4) % 8;
+int count_chain(Cell& start, Cell::Direction direction, int value){
+    Cell::Direction opposite = static_cast<Cell::Direction>((direction + 4) % 8);
     int chain = 1;
     Cell* current = start.next(direction);
 

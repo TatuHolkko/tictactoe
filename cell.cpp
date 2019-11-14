@@ -4,18 +4,18 @@ Cell::Cell(): value_(0)
 {
 }
 
-Cell* Cell::next(Direction dir){
+Cell* Cell::next(Direction dir) {
     return neighbors_[dir];
 }
 
-void Cell::link(Direction dir, Cell& neighbor){
+void Cell::link(Direction dir, Cell& neighbor) {
     neighbors_[dir] = &neighbor;
 }
 
-int Cell::get_value(){
+int Cell::get_value() const {
     return value_;
 }
 
-void Cell::set_value(int value){
+void Cell::set_value(int value) {
     value_ = value;
 }

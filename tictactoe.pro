@@ -10,5 +10,4 @@ SOURCES += main.cpp \
 
 HEADERS += \
     game.h \
-    cell.h \
-    gridhelper.h
+    cell.h

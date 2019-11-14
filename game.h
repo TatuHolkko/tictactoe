@@ -23,7 +23,8 @@ public:
     Cell* get_cell(int x, int y);
     //print the board
     void print();
-
+    //update and return game state based on last move
+    State update_state(const int placed_unit, const int x, const int y);
 private:
     //side length of the game board
     int size_ = 0;

@@ -20,7 +20,7 @@ public:
     //save a pointer to neighbor in a given direction
     void link(Direction dir, Cell& neighbor);
     //return value
-    int get_value();
+    int get_value() const;
     //set value
     void set_value(int value);
 
