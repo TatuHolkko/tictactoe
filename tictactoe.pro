@@ -5,8 +5,10 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     game.cpp \
-    cell.cpp
+    cell.cpp \
+    gridhelper.cpp
 
 HEADERS += \
     game.h \
-    cell.h
+    cell.h \
+    gridhelper.h
