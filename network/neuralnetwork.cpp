@@ -1,5 +1,6 @@
 #include "neuralnetwork.h"
 #include <cmath>
+#include <random>
 
 neuralnetwork::neuralnetwork(int grid_diameter,
                              int kernel_radius,
@@ -29,3 +30,26 @@ neuralnetwork::neuralnetwork(int grid_diameter,
     }
 }
 
+void neuralnetwork::randomize(){
+    vector<vector<float>>::iterator it1;
+    vector<float>::iterator it2;
+    for (it1 = kernels_.begin(); it1 < kernels_.end(); it1++){
+        for (it2 = it1->begin(); it2 < it1->end(); it2++){
+            *it2 = random_weight();
+        }
+    }
+    for (it1 = hidden_layer_.begin(); it1 < hidden_layer_.end(); it1++){
+        for (it2 = it1->begin(); it2 < it1->end(); it2++){
+            *it2 = random_weight();
+        }
+    }
+    for (it1 = output_.begin(); it1 < output_.end(); it1++){
+        for (it2 = it1->begin(); it2 < it1->end(); it2++){
+            *it2 = random_weight();
+        }
+    }
+}
+
+float neuralnetwork::random_weight(){
+    return rand() % 10000 / 5000 - 1;
+}

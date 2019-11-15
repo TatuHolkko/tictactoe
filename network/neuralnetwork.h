@@ -1,6 +1,7 @@
 #ifndef NEURALNETWORK_H
 #define NEURALNETWORK_H
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -12,6 +13,12 @@ public:
                   int hidden_neurons,
                   int mutation_rate,
                   int number_of_kernels);
+    //randomize all weights between -1 and 1
+    void randomize();
+    //load weights from a file
+    void load(string path);
+    //save weights into a file
+    void save(string path);
     /* feed game board state to the network and calculate the output
      * probability distribution where this network would place it's
      * next unit
@@ -39,9 +46,11 @@ private:
     //hidden layer weights
     vector<vector<float>> hidden_layer_ = {};
     //output weights
-    vector<vector<float>> output = {};
+    vector<vector<float>> output_ = {};
     //activation function
-    float sigmoid(float x);
+    static float sigmoid(float x);
+    //random weight function
+    static float random_weight();
 };
 
 #endif // NEURALNETWORK_H
