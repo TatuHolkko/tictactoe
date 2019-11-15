@@ -7,7 +7,7 @@ neuralnetwork::neuralnetwork(int grid_diameter,
                              int hidden_neurons,
                              int mutation_rate,
                              int number_of_kernels):
-    grid_size_(pow(grid_diameter, 2)),
+    grid_diameter_(grid_diameter),
     number_of_kernels_(number_of_kernels),
     kernel_radius_(kernel_radius),
     kernel_side_(2*kernel_radius + 1),
@@ -48,6 +48,51 @@ void neuralnetwork::randomize(){
             *it2 = random_weight();
         }
     }
+}
+
+int neuralnetwork::get_grid_diameter_()
+{
+    return grid_diameter_;
+}
+
+int neuralnetwork::get_number_of_kernels()
+{
+    return number_of_kernels_;
+}
+
+int neuralnetwork::get_kernel_radius()
+{
+    return kernel_radius_;
+}
+
+int neuralnetwork::get_kernel_side()
+{
+    return kernel_side_;
+}
+
+int neuralnetwork::get_hidden_layer_size()
+{
+    return hidden_layer_size_;
+}
+
+int neuralnetwork::get_mutatuon_rate()
+{
+    return mutation_rate_;
+}
+
+vector<vector<float>>& neuralnetwork::get_kernel_weights()
+{
+    return kernels_;
+}
+
+vector<vector<float>>& neuralnetwork::get_hidden_weights()
+{
+    return hidden_layer_;
+}
+
+vector<vector<float>>& neuralnetwork::get_output_weights()
+{
+    return output_;
 }
 
 float neuralnetwork::random_weight(){

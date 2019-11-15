@@ -15,10 +15,6 @@ public:
                   int number_of_kernels);
     //randomize all weights between -1 and 1
     void randomize();
-    //load weights from a file
-    void load(string path);
-    //save weights into a file
-    void save(string path);
     /* feed game board state to the network and calculate the output
      * probability distribution where this network would place it's
      * next unit
@@ -28,9 +24,19 @@ public:
     void mutate();
     //copy all weights from <other>
     void make_equal_to(const neuralnetwork& other);
+
+    int get_grid_diameter_();
+    int get_number_of_kernels();
+    int get_kernel_radius();
+    int get_kernel_side();
+    int get_hidden_layer_size();
+    int get_mutatuon_rate();
+    vector<vector<float>>& get_kernel_weights();
+    vector<vector<float>>& get_hidden_weights();
+    vector<vector<float>>& get_output_weights();
 private:
     //game grid side length
-    int grid_size_ = 0;
+    int grid_diameter_ = 0;
     //number of kernels
     int number_of_kernels_ = 0;
     //radius of the kernel (excluding center)
