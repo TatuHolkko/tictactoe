@@ -7,7 +7,11 @@ using namespace std;
 class neuralnetwork
 {
 public:
-    neuralnetwork();
+    neuralnetwork(int grid_diameter,
+                  int kernel_radius,
+                  int hidden_neurons,
+                  int mutation_rate,
+                  int number_of_kernels);
     /* feed game board state to the network and calculate the output
      * probability distribution where this network would place it's
      * next unit
@@ -20,20 +24,22 @@ public:
 private:
     //game grid side length
     int grid_size_ = 0;
-    //radius of the kernel
+    //number of kernels
+    int number_of_kernels_ = 0;
+    //radius of the kernel (excluding center)
     int kernel_radius_ = 0;
     //side length of the kernel
     int kernel_side_ = 0;
     //number of neurons in the hidden layer
     int hidden_layer_size_ = 0;
     //this scales the random nudges in weights
-    float mutation_rate = 0;
+    float mutation_rate_ = 0;
     //kernel weights for convolution
-    vector<vector<float>> kernels_;
+    vector<vector<float>> kernels_ = {};
     //hidden layer weights
-    vector<float> hidden_layer;
+    vector<vector<float>> hidden_layer_ = {};
     //output weights
-    vector<float> output;
+    vector<vector<float>> output = {};
     //activation function
     float sigmoid(float x);
 };
