@@ -17,15 +17,15 @@ neuralnetwork::neuralnetwork(int grid_diameter,
 {
     //initialize weights to zero
     for (int i = 0; i < number_of_kernels; i++){
-        vector<float> kernel(0, pow(kernel_side_, 2));
+        vector<float> kernel(pow(kernel_side_, 2), 0);
         kernels_.push_back(kernel);
     }
     for (int neuron = 0; neuron < hidden_neurons; neuron++){
-        vector<float> convoluted_inputs(0, pow(grid_diameter - 2*kernel_radius, 2)*number_of_kernels);
+        vector<float> convoluted_inputs(pow(grid_diameter - 2*kernel_radius, 2)*number_of_kernels, 0);
         hidden_layer_.push_back(convoluted_inputs);
     }
     for (int output = 0; output < pow(grid_diameter,2); output++){
-        vector<float> hidden_layer_output(0, hidden_neurons);
+        vector<float> hidden_layer_output(hidden_neurons, 0);
         output_.push_back(hidden_layer_output);
     }
 }
@@ -96,5 +96,5 @@ vector<vector<float>>& neuralnetwork::get_output_weights()
 }
 
 float neuralnetwork::random_weight(){
-    return rand() % 10000 / 5000 - 1;
+    return rand() % 10000 / 5000.0 - 1;
 }

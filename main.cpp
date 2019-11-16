@@ -1,5 +1,7 @@
 #include <iostream>
 #include "game/game.h"
+#include "filehandler.h"
+#include "network/neuralnetwork.h"
 
 using namespace std;
 
@@ -13,11 +15,9 @@ void place(Game& gm, int x, int y, int unit){
 
 int main()
 {
-    Game gm = Game(3, 2);
-    gm.print();
-    cout << "---------" << endl;
-    place(gm, 0, 1, 1);
-    place(gm, 1, 1, 1);
-    place(gm, 2, 1, 1);
+    neuralnetwork nn(5,1,5,1,3);
+    nn.randomize();
+    filehandler fh;
+    fh.save(nn, "../tictactoe/bu.nn");
     return 0;
 }
