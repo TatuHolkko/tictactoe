@@ -1,7 +1,8 @@
-#include "filehandler.h"
 #include <fstream>
 #include <iostream>
 #include <cmath>
+#include <memory>
+#include "filehandler.h"
 
 using namespace std;
 
@@ -64,13 +65,15 @@ bool filehandler::save(neuralnetwork &nn, const string& path)
     return true;
 }
 
-bool filehandler::load(neuralnetwork &nn, const string& path)
+shared_ptr<neuralnetwork> filehandler::load(const string& path, bool& ok)
 {
+    ok = true;
+    shared_ptr<neuralnetwork> nn;
     cout << "reading .nn file: " << path << endl;
     ifstream input(path);
     if (!input.is_open()){
         cout << "failed to read .nn file" << endl;
-        return false;
+        ok = false;
     }
     int diameter;
     int n_of_kernels;
@@ -89,10 +92,10 @@ bool filehandler::load(neuralnetwork &nn, const string& path)
         vector<string> line_args = split(line, ';');
 
         if (line_args[0] == LABEL_INIT){
-            nn = neuralnetwork(diameter, kernel_r, hidden_layer_size, mutation_rate, n_of_kernels);
-            kernels = nn.get_kernel_weights();
-            neurons = nn.get_hidden_weights();
-            outputs = nn.get_output_weights();
+            nn = shared_ptr<neuralnetwork>(new neuralnetwork(diameter, kernel_r, hidden_layer_size, mutation_rate, n_of_kernels));
+            kernels = &(nn->get_kernel_weights());
+            neurons = &(nn->get_hidden_weights());
+            outputs = &(nn->get_output_weights());
         } else if (line_args.size() == 2){
 
             if (line_args[0] == LABEL_DIAM){
@@ -113,11 +116,30 @@ bool filehandler::load(neuralnetwork &nn, const string& path)
         } else {
             if (line_args[0] == LABEL_KERNEL){
                 for (int i = 0; i < pow(kernel_r*2+1, 2); i++){
-
+                    kernels->at(current_kernel).at(i) = stod(line_args[i + 1]);
                 }
+                current_kernel++;
+            } else if (line_args[0] == LABEL_NEURON){
+                for (int i = 0; i < pow(diameter - 2*kernel_r, 2)*n_of_kernels; i++){
+                    neurons->at(current_neuron).at(i) = stod(line_args[i + 1]);
+                }
+                current_neuron++;
+            } else if (line_args[0] == LABEL_OUTPUT){
+                for (int i = 0; i < hidden_layer_size; i++){
+                    outputs->at(current_neuron).at(i) = stod(line_args[i + 1]);
+                }
+                current_output++;
             }
         }
     }
+    cout << "file reading ";
+    if (ok) {
+        cout << "complete";
+    } else {
+        cout << "failed";
+    }
+    cout << endl;
+    return nn;
 }
 
 vector<string> filehandler::split(const string& s,
