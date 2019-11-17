@@ -52,7 +52,7 @@ bool filehandler::save(neuralnetwork &nn, const string& path)
         }
         output << endl;
     }
-    vect = &nn.get_hidden_weights();
+    vect = &nn.get_output_weights();
     for (vector<float> output_neuron : *vect){
         output << LABEL_OUTPUT;
         for (float value : output_neuron){
