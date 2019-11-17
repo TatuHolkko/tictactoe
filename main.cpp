@@ -15,9 +15,8 @@ void place(Game& gm, int x, int y, int unit){
 
 int main()
 {
+    neuralnetwork nn(4,1,2,1,1);
     filehandler fh;
-    bool ok = false;
-    shared_ptr<neuralnetwork> nn = fh.load("../tictactoe/bu.nn", ok);
-    fh.save(*nn, "../tictactoe/bu2.nn");
+    bool ok = fh.save(nn, "../tictactoe/empty.nn");
     return 0;
 }

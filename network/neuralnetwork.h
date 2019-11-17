@@ -19,7 +19,7 @@ public:
      * probability distribution where this network would place it's
      * next unit
      */
-    vector<float> make_move(const vector<int>& game_grid);
+    vector<float> make_move(const vector<vector<int>>& game_grid);
     //nudge all weights randomly
     void mutate();
     //copy all weights from <other>
@@ -57,6 +57,8 @@ private:
     static float sigmoid(float x);
     //random weight function
     static float random_weight();
+    //return the result of a kernel applied to a point
+    static float apply_kernel(const vector<vector<int> > &game_grid, const vector<float> kernel, const int kernel_radius, const int x0, const int y0);
 };
 
 #endif // NEURALNETWORK_H

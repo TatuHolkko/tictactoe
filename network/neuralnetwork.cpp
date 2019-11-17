@@ -50,6 +50,50 @@ void neuralnetwork::randomize(){
     }
 }
 
+vector<float> neuralnetwork::make_move(const vector<vector<int>> &game_grid)
+{
+    vector<float> convoluted_inputs;
+    convoluted_inputs.reserve(number_of_kernels_ * pow(grid_diameter_ - 2*kernel_radius_, 2));
+
+    for (int kernel_index = 0; kernel_index < number_of_kernels_; kernel_index++){
+        for (int x = kernel_radius_; x < grid_diameter_ - kernel_radius_; x++){
+            for (int y = kernel_radius_; y < grid_diameter_ - kernel_radius_; y++){
+                float kernel_sum = apply_kernel(game_grid,
+                                                kernels_.at(kernel_index),
+                                                kernel_radius_,
+                                                x,
+                                                y);
+                float bias = kernels_.at(kernel_index).back();
+                convoluted_inputs.push_back(sigmoid(kernel_sum + bias));
+            }
+        }
+    }
+
+    vector<float> hidden_activations;
+    hidden_activations.reserve(hidden_layer_size_);
+    for (int neuron = 0; neuron < hidden_layer_size_; neuron++){
+        int sum = 0;
+        for (vector<float>::size_type input = 0; input < convoluted_inputs.size(); input++){
+            sum += convoluted_inputs.at(input) * hidden_layer_.at(neuron).at(input);
+        }
+        float bias = hidden_layer_.at(neuron).back();
+        hidden_activations.push_back(sigmoid(sum + bias));
+    }
+
+    vector<float> outputs;
+    int amount_of_cells = pow(grid_diameter_, 2);
+    outputs.reserve(amount_of_cells);
+    for (int output = 0; output < amount_of_cells; output++){
+        int sum = 0;
+        for (int hidd_neur = 0; hidd_neur < hidden_layer_size_; hidd_neur++){
+            sum += hidden_activations.at(hidd_neur) * output_.at(output).at(hidd_neur);
+        }
+        float bias = output_.at(output).back();
+        hidden_activations.push_back(sigmoid(sum + bias));
+    }
+    return outputs;
+}
+
 int neuralnetwork::get_grid_diameter_()
 {
     return grid_diameter_;
@@ -95,6 +139,26 @@ vector<vector<float>>& neuralnetwork::get_output_weights()
     return output_;
 }
 
+float neuralnetwork::sigmoid(float x)
+{
+    return x;
+}
+
 float neuralnetwork::random_weight(){
     return rand() % 10000 / 5000.0 - 1;
+}
+
+float neuralnetwork::apply_kernel(const vector<vector<int>> &game_grid,
+                   const vector<float> kernel,
+                   const int kernel_radius,
+                   const int x0,
+                   const int y0){
+    float sum = 0;
+    int kernel_side = 2*kernel_radius + 1;
+    for (int y = y0 - kernel_radius; y < y0 + kernel_radius + 1; y++){
+        for (int x = x0 - kernel_radius; x < x0 + kernel_radius + 1; x++){
+            sum += kernel.at(y*kernel_side + x)*game_grid.at(y).at(x);
+        }
+    }
+    return sum;
 }
