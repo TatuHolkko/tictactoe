@@ -21,6 +21,8 @@ public:
     State get_state();
     //return a pointer to cell at (x, y)
     Cell* get_cell(int x, int y);
+    //return grid
+    vector<vector<int>> get_board();
     //print the board
     void print();
     //update and return game state based on last move

@@ -58,6 +58,19 @@ Cell* Game::get_cell(int x, int y){
     return &board_.at(y).at(x);
 }
 
+vector<vector<int> > Game::get_board()
+{
+    vector<vector<int>> result;
+    for (int i = 0; i < size_; i++){
+        vector<int> row;
+        for (int j = 0; j < size_; i++){
+            row.push_back(board_.at(j).at(i).get_value());
+        }
+        result.push_back(row);
+    }
+    return result;
+}
+
 void Game::print(){
     for (vector<Cell> row : board_){
         for (Cell cell : row){
