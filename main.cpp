@@ -30,8 +30,12 @@ int main()
 
     filehandler fh;
     Game gm = Game(4, 2);
+    place(gm, 0, 0, 1);
+    place(gm, 1, 0, 1);
+    place(gm, 1, 1, 1);
+    place(gm, 0, 1, 1);
     bool ok = false;
-    shared_ptr<neuralnetwork> nn = fh.load("../ticatactoe/test.nn", ok);
+    shared_ptr<neuralnetwork> nn = fh.load("test.nn", ok);
     vector<float> output = nn->make_move(gm.get_board());
     print_output(output);
     return 0;

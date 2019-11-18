@@ -126,7 +126,7 @@ shared_ptr<neuralnetwork> filehandler::load(const string& path, bool& ok)
                 current_neuron++;
             } else if (line_args[0] == LABEL_OUTPUT){
                 for (int i = 0; i < hidden_layer_size; i++){
-                    outputs->at(current_neuron).at(i) = stod(line_args[i + 1]);
+                    outputs->at(current_output).at(i) = stod(line_args[i + 1]);
                 }
                 current_output++;
             }

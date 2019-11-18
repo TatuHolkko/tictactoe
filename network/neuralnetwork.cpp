@@ -89,7 +89,7 @@ vector<float> neuralnetwork::make_move(const vector<vector<int>> &game_grid)
             sum += hidden_activations.at(hidd_neur) * output_.at(output).at(hidd_neur);
         }
         float bias = output_.at(output).back();
-        hidden_activations.push_back(sigmoid(sum + bias));
+        outputs.push_back(sigmoid(sum + bias));
     }
     return outputs;
 }
@@ -155,9 +155,11 @@ float neuralnetwork::apply_kernel(const vector<vector<int>> &game_grid,
                    const int y0){
     float sum = 0;
     int kernel_side = 2*kernel_radius + 1;
-    for (int y = y0 - kernel_radius; y < y0 + kernel_radius + 1; y++){
-        for (int x = x0 - kernel_radius; x < x0 + kernel_radius + 1; x++){
-            sum += kernel.at(y*kernel_side + x)*game_grid.at(y).at(x);
+    for (int y = 0; y < kernel_side; y++){
+        for (int x = 0; x < kernel_side; x++){
+            int xg = x0 - kernel_radius + x;
+            int yg = y0 - kernel_radius + y;
+            sum += kernel.at(y*kernel_side + x)*game_grid.at(yg).at(xg);
         }
     }
     return sum;
