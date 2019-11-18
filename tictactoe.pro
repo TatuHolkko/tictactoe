@@ -8,10 +8,12 @@ SOURCES += main.cpp \
     game/cell.cpp \
     game/gridhelper.cpp \
     network/neuralnetwork.cpp \
-    filehandler/filehandler.cpp
+    filehandler/filehandler.cpp \
+    trainer/trainer.cpp
 
 HEADERS += \
     game/game.h \
     game/cell.h \
     network/neuralnetwork.h \
-    filehandler/filehandler.h
+    filehandler/filehandler.h \
+    trainer/trainer.h
