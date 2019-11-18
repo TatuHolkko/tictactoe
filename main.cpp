@@ -1,5 +1,5 @@
 #include "game/game.h"
-#include "filehandler.h"
+#include "filehandler/filehandler.h"
 #include "network/neuralnetwork.h"
 #include <iostream>
 #include <vector>
@@ -35,7 +35,7 @@ int main()
     place(gm, 1, 1, 1);
     place(gm, 0, 1, 1);
     bool ok = false;
-    shared_ptr<neuralnetwork> nn = fh.load("test.nn", ok);
+    shared_ptr<neuralnetwork> nn = fh.load("nnfiles/test.nn", ok);
     vector<float> output = nn->make_move(gm.get_board());
     print_output(output);
     return 0;
