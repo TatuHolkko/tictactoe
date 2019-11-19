@@ -94,32 +94,57 @@ vector<float> neuralnetwork::make_move(const vector<vector<int>> &game_grid)
     return outputs;
 }
 
-int neuralnetwork::get_grid_diameter_()
+void neuralnetwork::make_equal_to(neuralnetwork &other)
+{
+    vector<vector<float>>::iterator own_weight = kernels_.begin();
+    vector<vector<float>>::iterator other_weight = other.get_kernel_weights().begin();
+    while(own_weight != kernels_.end()){
+        *own_weight = *other_weight;
+        own_weight++;
+        other_weight++;
+    }
+    own_weight = hidden_layer_.begin();
+    other_weight = other.get_hidden_weights().begin();
+    while(own_weight != hidden_layer_.end()){
+        *own_weight = *other_weight;
+        own_weight++;
+        other_weight++;
+    }
+    own_weight = output_.begin();
+    other_weight = other.get_output_weights().begin();
+    while(own_weight != output_.end()){
+        *own_weight = *other_weight;
+        own_weight++;
+        other_weight++;
+    }
+}
+
+int neuralnetwork::get_grid_diameter() const
 {
     return grid_diameter_;
 }
 
-int neuralnetwork::get_number_of_kernels()
+int neuralnetwork::get_number_of_kernels() const
 {
     return number_of_kernels_;
 }
 
-int neuralnetwork::get_kernel_radius()
+int neuralnetwork::get_kernel_radius() const
 {
     return kernel_radius_;
 }
 
-int neuralnetwork::get_kernel_side()
+int neuralnetwork::get_kernel_side() const
 {
     return kernel_side_;
 }
 
-int neuralnetwork::get_hidden_layer_size()
+int neuralnetwork::get_hidden_layer_size() const
 {
     return hidden_layer_size_;
 }
 
-int neuralnetwork::get_mutatuon_rate()
+int neuralnetwork::get_mutation_rate() const
 {
     return mutation_rate_;
 }

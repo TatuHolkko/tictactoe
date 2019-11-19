@@ -9,6 +9,11 @@ public:
     trainer(neuralnetwork& ancestor, int pool_size);
     //iterate <n> generations of evolutionary progress
     void iterate(int n);
+private:
+    //pointer pointing to the last
+    neuralnetwork* winner_;
+    //pool of neural networks that compete against each other
+    vector<neuralnetwork> network_pool_;
 };
 
 #endif // TRAINER_H

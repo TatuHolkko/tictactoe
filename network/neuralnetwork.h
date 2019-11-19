@@ -23,17 +23,18 @@ public:
     //nudge all weights randomly
     void mutate();
     //copy all weights from <other>
-    void make_equal_to(const neuralnetwork& other);
+    void make_equal_to(neuralnetwork& other);
 
-    int get_grid_diameter_();
-    int get_number_of_kernels();
-    int get_kernel_radius();
-    int get_kernel_side();
-    int get_hidden_layer_size();
-    int get_mutatuon_rate();
+    int get_grid_diameter() const;
+    int get_number_of_kernels() const;
+    int get_kernel_radius() const;
+    int get_kernel_side() const;
+    int get_hidden_layer_size() const;
+    int get_mutation_rate() const;
     vector<vector<float>>& get_kernel_weights();
     vector<vector<float>>& get_hidden_weights();
     vector<vector<float>>& get_output_weights();
+
 private:
     //game grid side length
     int grid_diameter_ = 0;

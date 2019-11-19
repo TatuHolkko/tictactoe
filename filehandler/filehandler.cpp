@@ -29,11 +29,11 @@ bool filehandler::save(neuralnetwork &nn, const string& path)
         cout << "failed to back up" << endl;
         return false;
     }
-    output << LABEL_DIAM << ";" << nn.get_grid_diameter_() << endl;
+    output << LABEL_DIAM << ";" << nn.get_grid_diameter() << endl;
     output << LABEL_KERN_AMOUNT << ";" << nn.get_number_of_kernels() << endl;
     output << LABEL_KERN_R << ";" << nn.get_kernel_radius() << endl;
     output << LABEL_HIDD_SIZE << ";" << nn.get_hidden_layer_size() << endl;
-    output << LABEL_MUT_RATE << ";" << nn.get_mutatuon_rate() << endl;
+    output << LABEL_MUT_RATE << ";" << nn.get_mutation_rate() << endl;
     output << LABEL_INIT << endl;
     vector<vector<float>>* vect = &nn.get_kernel_weights();
 
