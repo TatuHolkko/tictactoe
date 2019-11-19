@@ -30,6 +30,27 @@ neuralnetwork::neuralnetwork(int grid_diameter,
     }
 }
 
+neuralnetwork::neuralnetwork(int grid_diameter,
+                             int kernel_radius,
+                             int hidden_neurons,
+                             int mutation_rate,
+                             int number_of_kernels,
+                             vector<vector<float> > kernels,
+                             vector<vector<float> > hidden_layer,
+                             vector<vector<float> > output):
+    grid_diameter_(grid_diameter),
+    number_of_kernels_(number_of_kernels),
+    kernel_radius_(kernel_radius),
+    kernel_side_(2*kernel_radius + 1),
+    hidden_layer_size_(hidden_neurons),
+    mutation_rate_(mutation_rate),
+    kernels_(kernels),
+    hidden_layer_(hidden_layer),
+    output_(output)
+{
+
+}
+
 void neuralnetwork::randomize(){
     vector<vector<float>>::iterator it1;
     vector<float>::iterator it2;
@@ -94,10 +115,10 @@ vector<float> neuralnetwork::make_move(const vector<vector<int>> &game_grid)
     return outputs;
 }
 
-void neuralnetwork::make_equal_to(neuralnetwork &other)
+void neuralnetwork::make_equal_to(const neuralnetwork &other)
 {
     vector<vector<float>>::iterator own_weight = kernels_.begin();
-    vector<vector<float>>::iterator other_weight = other.get_kernel_weights().begin();
+    vector<vector<float>>::const_iterator other_weight = other.get_kernel_weights().begin();
     while(own_weight != kernels_.end()){
         *own_weight = *other_weight;
         own_weight++;
@@ -149,17 +170,17 @@ int neuralnetwork::get_mutation_rate() const
     return mutation_rate_;
 }
 
-vector<vector<float>>& neuralnetwork::get_kernel_weights()
+const vector<vector<float>>& neuralnetwork::get_kernel_weights() const
 {
     return kernels_;
 }
 
-vector<vector<float>>& neuralnetwork::get_hidden_weights()
+const vector<vector<float>>& neuralnetwork::get_hidden_weights() const
 {
     return hidden_layer_;
 }
 
-vector<vector<float>>& neuralnetwork::get_output_weights()
+const vector<vector<float>>& neuralnetwork::get_output_weights() const
 {
     return output_;
 }

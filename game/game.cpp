@@ -22,7 +22,7 @@ Game::Game(int size, int win): size_(size), win_(win)
     link_grid(board_, size);
 }
 
-Game::State Game::get_state(){
+Game::State Game::get_state() const{
     return state_;
 }
 
@@ -58,7 +58,7 @@ Cell* Game::get_cell(int x, int y){
     return &board_.at(y).at(x);
 }
 
-vector<vector<int> > Game::get_board()
+vector<vector<int>> Game::get_board() const
 {
     vector<vector<int>> result;
     for (int i = 0; i < size_; i++){
@@ -71,7 +71,7 @@ vector<vector<int> > Game::get_board()
     return result;
 }
 
-void Game::print(){
+void Game::print() const {
     for (vector<Cell> row : board_){
         for (Cell cell : row){
             cout << " " << cell.get_value();

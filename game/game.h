@@ -18,13 +18,13 @@ public:
 
     Game(int size, int win);
     //return game state as an enumerator of type State
-    State get_state();
+    State get_state() const;
     //return a pointer to cell at (x, y)
     Cell* get_cell(int x, int y);
     //return grid
-    vector<vector<int>> get_board();
+    vector<vector<int>> get_board() const;
     //print the board
-    void print();
+    void print() const;
     //update and return game state based on last move
     State update_state(const int placed_unit, const int x, const int y);
 private:

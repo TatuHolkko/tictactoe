@@ -13,6 +13,15 @@ public:
                   int hidden_neurons,
                   int mutation_rate,
                   int number_of_kernels);
+
+    neuralnetwork(int grid_diameter,
+                  int kernel_radius,
+                  int hidden_neurons,
+                  int mutation_rate,
+                  int number_of_kernels,
+                  vector<vector<float>> kernels,
+                  vector<vector<float>> hidden_layer,
+                  vector<vector<float>> output);
     //randomize all weights between -1 and 1
     void randomize();
     /* feed game board state to the network and calculate the output
@@ -23,7 +32,7 @@ public:
     //nudge all weights randomly
     void mutate();
     //copy all weights from <other>
-    void make_equal_to(neuralnetwork& other);
+    void make_equal_to(const neuralnetwork& other);
 
     int get_grid_diameter() const;
     int get_number_of_kernels() const;
@@ -31,9 +40,9 @@ public:
     int get_kernel_side() const;
     int get_hidden_layer_size() const;
     int get_mutation_rate() const;
-    vector<vector<float>>& get_kernel_weights();
-    vector<vector<float>>& get_hidden_weights();
-    vector<vector<float>>& get_output_weights();
+    const vector<vector<float>>& get_kernel_weights() const;
+    const vector<vector<float>>& get_hidden_weights() const;
+    const vector<vector<float>>& get_output_weights() const;
 
 private:
     //game grid side length

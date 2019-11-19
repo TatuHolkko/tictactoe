@@ -35,7 +35,7 @@ bool filehandler::save(neuralnetwork &nn, const string& path)
     output << LABEL_HIDD_SIZE << ";" << nn.get_hidden_layer_size() << endl;
     output << LABEL_MUT_RATE << ";" << nn.get_mutation_rate() << endl;
     output << LABEL_INIT << endl;
-    vector<vector<float>>* vect = &nn.get_kernel_weights();
+    const vector<vector<float>>* vect = &nn.get_kernel_weights();
 
     for (vector<float> kernel : *vect){
         output << LABEL_KERNEL;
@@ -80,23 +80,13 @@ shared_ptr<neuralnetwork> filehandler::load(const string& path, bool& ok)
     int kernel_r;
     int hidden_layer_size;
     int mutation_rate;
-
-    int current_kernel = 0;
-    int current_neuron = 0;
-    int current_output = 0;
-    vector<vector<float>>* kernels;
-    vector<vector<float>>* neurons;
-    vector<vector<float>>* outputs;
+    vector<vector<float>> kernels;
+    vector<vector<float>> neurons;
+    vector<vector<float>> outputs;
     string line = "";
     while(getline(input, line)){
         vector<string> line_args = split(line, ';');
-
-        if (line_args[0] == LABEL_INIT){
-            nn = shared_ptr<neuralnetwork>(new neuralnetwork(diameter, kernel_r, hidden_layer_size, mutation_rate, n_of_kernels));
-            kernels = &(nn->get_kernel_weights());
-            neurons = &(nn->get_hidden_weights());
-            outputs = &(nn->get_output_weights());
-        } else if (line_args.size() == 2){
+        if (line_args.size() == 2){
 
             if (line_args[0] == LABEL_DIAM){
                 diameter = stoi(line_args[1]);
@@ -115,23 +105,36 @@ shared_ptr<neuralnetwork> filehandler::load(const string& path, bool& ok)
             }
         } else {
             if (line_args[0] == LABEL_KERNEL){
-                for (int i = 0; i < pow(kernel_r*2+1, 2); i++){
-                    kernels->at(current_kernel).at(i) = stod(line_args[i + 1]);
+                vector<float> kernel = {};
+                for (int i = 0; i < pow(kernel_r*2+1, 2) + 1; i++){
+
+                    kernel.push_back(stod(line_args[i + 1]));
                 }
-                current_kernel++;
+                kernels.push_back(kernel);
             } else if (line_args[0] == LABEL_NEURON){
-                for (int i = 0; i < pow(diameter - 2*kernel_r, 2)*n_of_kernels; i++){
-                    neurons->at(current_neuron).at(i) = stod(line_args[i + 1]);
+                vector<float> hidden_neuron = {};
+                for (int i = 0; i < pow(diameter - 2*kernel_r, 2)*n_of_kernels + 1; i++){
+                    hidden_neuron.push_back(stod(line_args[i + 1]));
                 }
-                current_neuron++;
+                neurons.push_back(hidden_neuron);
             } else if (line_args[0] == LABEL_OUTPUT){
-                for (int i = 0; i < hidden_layer_size; i++){
-                    outputs->at(current_output).at(i) = stod(line_args[i + 1]);
+                vector<float> output = {};
+                for (int i = 0; i < hidden_layer_size + 1; i++){
+                    output.push_back(stod(line_args[i + 1]));
                 }
-                current_output++;
+                outputs.push_back(output);
             }
         }
     }
+    input.close();
+    nn = shared_ptr<neuralnetwork>(new neuralnetwork(diameter,
+                                                     kernel_r,
+                                                     hidden_layer_size,
+                                                     mutation_rate,
+                                                     n_of_kernels,
+                                                     kernels,
+                                                     neurons,
+                                                     outputs));
     cout << "file reading ";
     if (ok) {
         cout << "complete";
