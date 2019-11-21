@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <memory>
+
 #include "filehandler.h"
 
 using namespace std;
@@ -11,7 +12,6 @@ const string LABEL_KERN_AMOUNT = "number of kernels";
 const string LABEL_KERN_R = "kernel radius";
 const string LABEL_HIDD_SIZE = "hidden layer size";
 const string LABEL_MUT_RATE = "mutation rate";
-const string LABEL_INIT = "initialize";
 const string LABEL_KERNEL = "kernel";
 const string LABEL_NEURON = "neuron";
 const string LABEL_OUTPUT = "output";
@@ -34,7 +34,6 @@ bool filehandler::save(neuralnetwork &nn, const string& path)
     output << LABEL_KERN_R << ";" << nn.get_kernel_radius() << endl;
     output << LABEL_HIDD_SIZE << ";" << nn.get_hidden_layer_size() << endl;
     output << LABEL_MUT_RATE << ";" << nn.get_mutation_rate() << endl;
-    output << LABEL_INIT << endl;
     const vector<vector<float>>* vect = &nn.get_kernel_weights();
 
     for (vector<float> kernel : *vect){
@@ -65,15 +64,13 @@ bool filehandler::save(neuralnetwork &nn, const string& path)
     return true;
 }
 
-shared_ptr<neuralnetwork> filehandler::load(const string& path, bool& ok)
+neuralnetwork filehandler::load(const string& path)
 {
-    ok = true;
-    shared_ptr<neuralnetwork> nn;
     cout << "reading .nn file: " << path << endl;
     ifstream input(path);
     if (!input.is_open()){
         cout << "failed to read .nn file" << endl;
-        ok = false;
+        throw "failed to read .nn file";
     }
     int diameter;
     int n_of_kernels;
@@ -127,27 +124,19 @@ shared_ptr<neuralnetwork> filehandler::load(const string& path, bool& ok)
         }
     }
     input.close();
-    nn = shared_ptr<neuralnetwork>(new neuralnetwork(diameter,
-                                                     kernel_r,
-                                                     hidden_layer_size,
-                                                     mutation_rate,
-                                                     n_of_kernels,
-                                                     kernels,
-                                                     neurons,
-                                                     outputs));
-    cout << "file reading ";
-    if (ok) {
-        cout << "complete";
-    } else {
-        cout << "failed";
-    }
-    cout << endl;
-    return nn;
+    return neuralnetwork(diameter,
+                         kernel_r,
+                         hidden_layer_size,
+                         mutation_rate,
+                         n_of_kernels,
+                         kernels,
+                         neurons,
+                         outputs);
 }
 
 vector<string> filehandler::split(const string& s,
-                               const char delimiter,
-                               bool ignore_empty){
+                                  const char delimiter,
+                                  bool ignore_empty){
     vector<string> result;
     string tmp = s;
 
