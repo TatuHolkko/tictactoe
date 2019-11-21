@@ -1,7 +1,8 @@
 #include "trainer.h"
 
-trainer::trainer(neuralnetwork &ancestor, int pool_size):
-    winner_(nullptr)
+trainer::trainer(neuralnetwork &ancestor, int pool_size, Game& game):
+    winner_(nullptr),
+    game_(&game)
 {
     network_pool_ = {};
     network_pool_.reserve(pool_size);

@@ -11,14 +11,22 @@ public:
     //the game is always in one of these states
     enum State{
         ongoing,
+        ended
+    };
+    //game that has ended will be in one of these states
+    enum Result{
+        tie,
         player1_win,
-        player2_win,
-        tied
+        player2_win
     };
 
     Game(int size, int win);
-    //return game state as an enumerator of type State
+    //return game state
     State get_state() const;
+    /* return game result. game state must be "ended" before
+     * calling this
+     */
+    Result get_result() const;
     //return a pointer to cell at (x, y)
     Cell* get_cell(int x, int y);
     //return grid
@@ -36,6 +44,10 @@ private:
     int length = 0;
     //game state that is updated every time a unit is placed
     State state_ = ongoing;
+    /* game result that is updated once the game reaches
+     * "ended" -state
+     */
+    Result result_ = tie;
     //grid where the units are represented as Cell objects
     vector<vector<Cell>> board_;
 

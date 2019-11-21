@@ -70,7 +70,7 @@ neuralnetwork filehandler::load(const string& path)
     ifstream input(path);
     if (!input.is_open()){
         cout << "failed to read .nn file" << endl;
-        throw "failed to read .nn file";
+        throw std::invalid_argument("invalid .nn file");
     }
     int diameter;
     int n_of_kernels;
