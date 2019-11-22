@@ -16,27 +16,24 @@ public:
                   int number_of_kernels);
 
     NeuralNetwork(const vector<vector<float>>& kernels,
-                  const vector<vector<float>>& hidden_layer,
-                  const vector<vector<float>>& output);
-
+                  const vector<vector<float>>& hidden_layer_weights,
+                  const vector<vector<float>>& output_weights);
+    //initialize weights and attributes from weight vectors
     void initialize_from(const vector<vector<float> >& kernels,
-                         const vector<vector<float> >& hidden_layer,
-                         const vector<vector<float> >& output);
+                         const vector<vector<float> >& hidden_layer_weights,
+                         const vector<vector<float> >& output_weights);
     //randomize all weights between -1 and 1
     void randomize();
     /* feed game board state to the network and calculate the output
      * probability distribution where this network would place it's
      * next unit
      */
-    vector<float> make_move(const vector<vector<int>>& game_grid);
+    vector<float> make_move(const vector<vector<int>>& game_grid) const;
     //nudge all weights randomly
     void mutate(float scale);
     //copy all weights from <other>
     void make_equal_to(const NeuralNetwork& other);
-    //copy all weights and initialize attributes from weight vectors
-    void make_equal_to(const vector<vector<float>>& kernels,
-                       const vector<vector<float>>& hidden_layer,
-                       const vector<vector<float>>& output);
+
     int get_grid_diameter() const;
     int get_number_of_kernels() const;
     int get_kernel_radius() const;
@@ -67,7 +64,7 @@ private:
     //activation function
     static float activation_function(float x);
     //random weight function
-    static float random_weight();
+    static float random_number();
     //return the result of a kernel applied to a point
     static float apply_kernel(const vector<vector<int> > &game_grid, const vector<float> kernel, const int kernel_radius, const int x0, const int y0);
 };

@@ -26,6 +26,28 @@ Game::State Game::get_state() const{
     return state_;
 }
 
+Game::Result Game::get_result() const
+{
+    return result_;
+}
+
+int Game::get_length() const
+{
+    return length_;
+}
+
+void Game::reset()
+{
+    for (vector<Cell> row : board_){
+        for (Cell cell : row){
+            cell.set_value(0);
+        }
+    }
+    state_ = ongoing;
+    result_ = tie;
+    length_ = 0;
+}
+
 Game::State Game::update_state(const int placed_unit, const int x, const int y){
     Cell* placed_cell = get_cell(x, y);
     //check chain lenghts in all directions
@@ -41,7 +63,7 @@ Game::State Game::update_state(const int placed_unit, const int x, const int y){
         }
         return ended;
     } else {
-        if (length < size_*size_){
+        if (length_ < size_*size_){
             state_ = ongoing;
             return ongoing;
         } else {
@@ -86,6 +108,18 @@ bool Game::place(int unit, int x, int y){
         return false;
     }
     board_.at(y).at(x).set_value(unit);
+    update_state(unit, x, y);
+    length_++;
     return true;
+}
+
+bool Game::can_place(int x, int y) const
+{
+    return board_.at(y).at(x).get_value() == 0;
+}
+
+int Game::get_side_length() const
+{
+    return size_;
 }
 

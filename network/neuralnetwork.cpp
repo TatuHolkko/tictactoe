@@ -67,22 +67,22 @@ void NeuralNetwork::randomize(){
     vector<float>::iterator it2;
     for (it1 = kernels_.begin(); it1 < kernels_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_weight();
+            *it2 = random_number();
         }
     }
     for (it1 = hidden_layer_weights_.begin(); it1 < hidden_layer_weights_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_weight();
+            *it2 = random_number();
         }
     }
     for (it1 = output_weights_.begin(); it1 < output_weights_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_weight();
+            *it2 = random_number();
         }
     }
 }
 
-vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid)
+vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid) const
 {
     vector<float> convoluted_inputs;
     convoluted_inputs.reserve(number_of_kernels_ * pow(grid_diameter_ - 2*kernel_radius_, 2));
@@ -124,6 +124,27 @@ vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid)
         outputs.push_back(activation_function(sum + bias));
     }
     return outputs;
+}
+
+void NeuralNetwork::mutate(float scale)
+{
+    vector<vector<float>>::iterator it1;
+    vector<float>::iterator it2;
+    for (it1 = kernels_.begin(); it1 < kernels_.end(); it1++){
+        for (it2 = it1->begin(); it2 < it1->end(); it2++){
+            *it2 += random_number() * scale;
+        }
+    }
+    for (it1 = hidden_layer_weights_.begin(); it1 < hidden_layer_weights_.end(); it1++){
+        for (it2 = it1->begin(); it2 < it1->end(); it2++){
+            *it2 += random_number() * scale;
+        }
+    }
+    for (it1 = output_weights_.begin(); it1 < output_weights_.end(); it1++){
+        for (it2 = it1->begin(); it2 < it1->end(); it2++){
+            *it2 += random_number() * scale;
+        }
+    }
 }
 
 void NeuralNetwork::make_equal_to(const NeuralNetwork &other)
@@ -196,7 +217,7 @@ float NeuralNetwork::activation_function(float x)
     return x;
 }
 
-float NeuralNetwork::random_weight(){
+float NeuralNetwork::random_number(){
     return rand() % 10000 / 5000.0 - 1;
 }
 

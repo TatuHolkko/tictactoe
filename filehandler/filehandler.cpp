@@ -60,7 +60,7 @@ bool filehandler::load(NeuralNetwork& nn, const string& path)
     ifstream input(path);
     if (!input.is_open()){
         cout << "failed to read .nn file" << endl;
-        throw std::invalid_argument("invalid .nn file");
+        return false;
     }
     vector<vector<float>> kernels;
     vector<vector<float>> hidden_layer_weights;
@@ -96,6 +96,7 @@ bool filehandler::load(NeuralNetwork& nn, const string& path)
     }
     input.close();
     nn.initialize_from(kernels, hidden_layer_weights, output_weights);
+    return true;
 }
 
 vector<string> filehandler::split(const string& s,

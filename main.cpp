@@ -10,7 +10,7 @@ using namespace std;
 void place(Game& gm, int x, int y, int unit){
     Cell* c = gm.get_cell(x, y);
     c->set_value(unit);
-    gm.update_state(unit, x, y);
+    gm.place(unit, x, y);
     gm.print();
     cout << "---------" << gm.get_state() << endl;
 }
