@@ -18,6 +18,10 @@ public:
     NeuralNetwork(const vector<vector<float>>& kernels,
                   const vector<vector<float>>& hidden_layer,
                   const vector<vector<float>>& output);
+
+    void initialize_from(const vector<vector<float> >& kernels,
+                         const vector<vector<float> >& hidden_layer,
+                         const vector<vector<float> >& output);
     //randomize all weights between -1 and 1
     void randomize();
     /* feed game board state to the network and calculate the output
@@ -42,6 +46,7 @@ public:
     const vector<vector<float>>& get_hidden_weights() const;
     const vector<vector<float>>& get_output_weights() const;
 
+
 private:
     //game grid side length
     int grid_diameter_ = 0;
@@ -56,9 +61,9 @@ private:
     //kernel weights for convolution
     vector<vector<float>> kernels_ = {};
     //hidden layer weights
-    vector<vector<float>> hidden_layer_weights = {};
+    vector<vector<float>> hidden_layer_weights_ = {};
     //output weights
-    vector<vector<float>> output_weights = {};
+    vector<vector<float>> output_weights_ = {};
     //activation function
     static float activation_function(float x);
     //random weight function

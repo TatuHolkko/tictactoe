@@ -9,8 +9,8 @@ NeuralNetwork::NeuralNetwork():
     kernel_side_(0),
     hidden_layer_size_(0),
     kernels_({}),
-    hidden_layer_weights({}),
-    output_weights({})
+    hidden_layer_weights_({}),
+    output_weights_({})
 {
 
 }
@@ -32,27 +32,34 @@ NeuralNetwork::NeuralNetwork(int grid_diameter,
     }
     for (int neuron = 0; neuron < hidden_neurons; neuron++){
         vector<float> convoluted_inputs(pow(grid_diameter - 2*kernel_radius, 2)*number_of_kernels + 1, 0);
-        hidden_layer_weights.push_back(convoluted_inputs);
+        hidden_layer_weights_.push_back(convoluted_inputs);
     }
     for (int output = 0; output < pow(grid_diameter,2); output++){
         vector<float> hidden_layer_output(hidden_neurons + 1, 0);
-        output_weights.push_back(hidden_layer_output);
+        output_weights_.push_back(hidden_layer_output);
     }
 }
 
 NeuralNetwork::NeuralNetwork(const vector<vector<float>>& kernels,
-                             const vector<vector<float>>& hidden_layer,
+                             const vector<vector<float>>& hidden_layer_weights,
                              const vector<vector<float>>& output):
-    grid_diameter_(sqrt(output.size())),
-    number_of_kernels_(kernels.size()),
-    kernel_radius_(floor(sqrt(kernels.at(0).size())/2)),
-    kernel_side_(2*kernel_radius_ + 1),
-    hidden_layer_size_(hidden_layer.size()),
-    kernels_(kernels),
-    hidden_layer_weights(hidden_layer),
-    output_weights(output)
+    NeuralNetwork()
 {
+    initialize_from(kernels, hidden_layer_weights, output);
+}
 
+void NeuralNetwork::initialize_from(const vector<vector<float>>& kernels,
+                                    const vector<vector<float>>& hidden_layer_weights,
+                                    const vector<vector<float>>& output_weights)
+{
+    grid_diameter_ = sqrt(output_weights.size());
+    number_of_kernels_ = kernels.size();
+    kernel_radius_ = floor(sqrt(kernels.at(0).size())/2);
+    kernel_side_ = 2*kernel_radius_ + 1;
+    hidden_layer_size_ = hidden_layer_weights.size();
+    kernels_ = kernels;
+    hidden_layer_weights_ = hidden_layer_weights;
+    output_weights_ = output_weights;
 }
 
 void NeuralNetwork::randomize(){
@@ -63,12 +70,12 @@ void NeuralNetwork::randomize(){
             *it2 = random_weight();
         }
     }
-    for (it1 = hidden_layer_weights.begin(); it1 < hidden_layer_weights.end(); it1++){
+    for (it1 = hidden_layer_weights_.begin(); it1 < hidden_layer_weights_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
             *it2 = random_weight();
         }
     }
-    for (it1 = output_weights.begin(); it1 < output_weights.end(); it1++){
+    for (it1 = output_weights_.begin(); it1 < output_weights_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
             *it2 = random_weight();
         }
@@ -99,9 +106,9 @@ vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid)
     for (int neuron = 0; neuron < hidden_layer_size_; neuron++){
         int sum = 0;
         for (vector<float>::size_type input = 0; input < convoluted_inputs.size(); input++){
-            sum += convoluted_inputs.at(input) * hidden_layer_weights.at(neuron).at(input);
+            sum += convoluted_inputs.at(input) * hidden_layer_weights_.at(neuron).at(input);
         }
-        float bias = hidden_layer_weights.at(neuron).back();
+        float bias = hidden_layer_weights_.at(neuron).back();
         hidden_activations.push_back(activation_function(sum + bias));
     }
 
@@ -111,9 +118,9 @@ vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid)
     for (int output = 0; output < amount_of_cells; output++){
         int sum = 0;
         for (int hidd_neur = 0; hidd_neur < hidden_layer_size_; hidd_neur++){
-            sum += hidden_activations.at(hidd_neur) * output_weights.at(output).at(hidd_neur);
+            sum += hidden_activations.at(hidd_neur) * output_weights_.at(output).at(hidd_neur);
         }
-        float bias = output_weights.at(output).back();
+        float bias = output_weights_.at(output).back();
         outputs.push_back(activation_function(sum + bias));
     }
     return outputs;
@@ -128,16 +135,16 @@ void NeuralNetwork::make_equal_to(const NeuralNetwork &other)
         own_weight++;
         other_weight++;
     }
-    own_weight = hidden_layer_weights.begin();
+    own_weight = hidden_layer_weights_.begin();
     other_weight = other.get_hidden_weights().begin();
-    while(own_weight != hidden_layer_weights.end()){
+    while(own_weight != hidden_layer_weights_.end()){
         *own_weight = *other_weight;
         own_weight++;
         other_weight++;
     }
-    own_weight = output_weights.begin();
+    own_weight = output_weights_.begin();
     other_weight = other.get_output_weights().begin();
-    while(own_weight != output_weights.end()){
+    while(own_weight != output_weights_.end()){
         *own_weight = *other_weight;
         own_weight++;
         other_weight++;
@@ -176,12 +183,12 @@ const vector<vector<float>>& NeuralNetwork::get_kernel_weights() const
 
 const vector<vector<float>>& NeuralNetwork::get_hidden_weights() const
 {
-    return hidden_layer_weights;
+    return hidden_layer_weights_;
 }
 
 const vector<vector<float>>& NeuralNetwork::get_output_weights() const
 {
-    return output_weights;
+    return output_weights_;
 }
 
 float NeuralNetwork::activation_function(float x)

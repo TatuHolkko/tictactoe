@@ -54,7 +54,7 @@ bool filehandler::save(NeuralNetwork &nn, const string& path)
     return true;
 }
 
-NeuralNetwork filehandler::load(const string& path)
+bool filehandler::load(NeuralNetwork& nn, const string& path)
 {
     cout << "reading .nn file: " << path << endl;
     ifstream input(path);
@@ -63,8 +63,8 @@ NeuralNetwork filehandler::load(const string& path)
         throw std::invalid_argument("invalid .nn file");
     }
     vector<vector<float>> kernels;
-    vector<vector<float>> neurons;
-    vector<vector<float>> outputs;
+    vector<vector<float>> hidden_layer_weights;
+    vector<vector<float>> output_weights;
     string line = "";
     while(getline(input, line)){
         vector<string> line_args = split(line, ';');
@@ -83,7 +83,7 @@ NeuralNetwork filehandler::load(const string& path)
             for (vector<string>::size_type i = 1; i < line_args.size(); i++){
                 hidden_neuron.push_back(stod(line_args[i]));
             }
-            neurons.push_back(hidden_neuron);
+            hidden_layer_weights.push_back(hidden_neuron);
 
         } else if (line_args[0] == LABEL_OUTPUT){
 
@@ -91,13 +91,11 @@ NeuralNetwork filehandler::load(const string& path)
             for (vector<string>::size_type i = 1; i < line_args.size(); i++){
                 output.push_back(stod(line_args[i]));
             }
-            outputs.push_back(output);
+            output_weights.push_back(output);
         }
     }
     input.close();
-    return NeuralNetwork(kernels,
-                         neurons,
-                         outputs);
+    nn.initialize_from(kernels, hidden_layer_weights, output_weights);
 }
 
 vector<string> filehandler::split(const string& s,
