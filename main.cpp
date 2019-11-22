@@ -34,7 +34,7 @@ int main()
     place(gm, 1, 0, 1);
     place(gm, 1, 1, 1);
     place(gm, 0, 1, 1);
-    neuralnetwork nn = fh.load("nnfiles/test.nn");
+    NeuralNetwork nn = fh.load("nnfiles/test.nn");
     vector<float> output = nn.make_move(gm.get_board());
     print_output(output);
 

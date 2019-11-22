@@ -32,22 +32,23 @@ Game::State Game::update_state(const int placed_unit, const int x, const int y){
     if (       count_chain(*placed_cell, Cell::right, placed_unit)       >= win_
             || count_chain(*placed_cell, Cell::down_right, placed_unit)  >= win_
             || count_chain(*placed_cell, Cell::down, placed_unit)        >= win_){
-
+        state_ = ended;
         if (placed_unit == 1){
-            state_ = player1_win;
-            return player1_win;
+            result_ = player1_win;
+
         } else {
-            state_ = player2_win;
-            return player2_win;
+            result_ = player2_win;
         }
+        return ended;
     } else {
         if (length < size_*size_){
             state_ = ongoing;
             return ongoing;
         } else {
             //no free space left
-            state_ = tied;
-            return tied;
+            state_ = ended;
+            result_ = tie;
+            return ended;
         }
     }
 }

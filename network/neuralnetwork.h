@@ -5,23 +5,19 @@
 
 using namespace std;
 
-class neuralnetwork
+class NeuralNetwork
 {
 public:
-    neuralnetwork(int grid_diameter,
+    NeuralNetwork();
+
+    NeuralNetwork(int grid_diameter,
                   int kernel_radius,
                   int hidden_neurons,
-                  int mutation_rate,
                   int number_of_kernels);
 
-    neuralnetwork(int grid_diameter,
-                  int kernel_radius,
-                  int hidden_neurons,
-                  int mutation_rate,
-                  int number_of_kernels,
-                  vector<vector<float>> kernels,
-                  vector<vector<float>> hidden_layer,
-                  vector<vector<float>> output);
+    NeuralNetwork(const vector<vector<float>>& kernels,
+                  const vector<vector<float>>& hidden_layer,
+                  const vector<vector<float>>& output);
     //randomize all weights between -1 and 1
     void randomize();
     /* feed game board state to the network and calculate the output
@@ -30,16 +26,18 @@ public:
      */
     vector<float> make_move(const vector<vector<int>>& game_grid);
     //nudge all weights randomly
-    void mutate();
+    void mutate(float scale);
     //copy all weights from <other>
-    void make_equal_to(const neuralnetwork& other);
-
+    void make_equal_to(const NeuralNetwork& other);
+    //copy all weights and initialize attributes from weight vectors
+    void make_equal_to(const vector<vector<float>>& kernels,
+                       const vector<vector<float>>& hidden_layer,
+                       const vector<vector<float>>& output);
     int get_grid_diameter() const;
     int get_number_of_kernels() const;
     int get_kernel_radius() const;
     int get_kernel_side() const;
     int get_hidden_layer_size() const;
-    int get_mutation_rate() const;
     const vector<vector<float>>& get_kernel_weights() const;
     const vector<vector<float>>& get_hidden_weights() const;
     const vector<vector<float>>& get_output_weights() const;
@@ -55,16 +53,14 @@ private:
     int kernel_side_ = 0;
     //number of neurons in the hidden layer
     int hidden_layer_size_ = 0;
-    //this scales the random nudges in weights
-    float mutation_rate_ = 0;
     //kernel weights for convolution
     vector<vector<float>> kernels_ = {};
     //hidden layer weights
-    vector<vector<float>> hidden_layer_ = {};
+    vector<vector<float>> hidden_layer_weights = {};
     //output weights
-    vector<vector<float>> output_ = {};
+    vector<vector<float>> output_weights = {};
     //activation function
-    static float sigmoid(float x);
+    static float activation_function(float x);
     //random weight function
     static float random_weight();
     //return the result of a kernel applied to a point
