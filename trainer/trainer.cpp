@@ -1,6 +1,7 @@
 #include "trainer.h"
 #include <random>
 #include <cmath>
+#include <numeric>
 
 Trainer::Trainer(NeuralNetwork &ancestor,
                  int pool_size,
@@ -109,6 +110,7 @@ pair<int, int> Trainer::get_move(const vector<float>& dist) const
     /* copy the original distribution so we can remove coordinates
      * that are blocked from the distribution
      */
+    vector<float> not_checked = vector<float>(dist.size(), 1);
     vector<float> masked_dist = dist;
     default_random_engine generator;
     discrete_distribution<int> distribution(masked_dist.begin(), masked_dist.end());
@@ -120,6 +122,16 @@ pair<int, int> Trainer::get_move(const vector<float>& dist) const
         //if x, y is blocked, remove it from the distribution
         //so it doesnt get picked again
         masked_dist.at(placed_on) = 0;
+        //keep track of all tiles that are checked to not be empty
+        not_checked.at(placed_on) = 0;
+
+        if (std::accumulate(masked_dist.begin(), masked_dist.end(), 0) == 0){
+            //the prob dist given only contains non-zero elements in blocked cells,
+            //set the dist to be equally likely on all tiles that have not yet
+            //been checked
+            masked_dist = not_checked;
+        }
+
         //redefine the distribution
         distribution = discrete_distribution<int>(masked_dist.begin(), masked_dist.end());
         //repick a coordinate
