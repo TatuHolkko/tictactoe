@@ -16,7 +16,7 @@ filehandler::filehandler()
 
 }
 
-bool filehandler::save(NeuralNetwork &nn, const string& path)
+bool filehandler::save(const NeuralNetwork &nn, const string& path)
 {
     cout << "backing up into: " << path << endl;
     ofstream output(path);

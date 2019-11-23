@@ -10,7 +10,7 @@ class filehandler
 public:
     filehandler();
     //save a neural network into a file, return true if successful
-    bool save(NeuralNetwork& nn, const string& path);
+    bool save(const NeuralNetwork& nn, const string& path);
     // load a neural network from a file, return true if successful
     bool load(NeuralNetwork& nn, const string& path);
 private:
