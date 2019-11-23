@@ -38,9 +38,9 @@ int Game::get_length() const
 
 void Game::reset()
 {
-    for (vector<Cell> row : board_){
-        for (Cell cell : row){
-            cell.set_value(0);
+    for (vector<vector<Cell>>::iterator row = board_.begin(); row < board_.end(); row++){
+        for (vector<Cell>::iterator cell_it =  row->begin(); cell_it < row->end(); cell_it++){
+            cell_it->set_value(0);
         }
     }
     state_ = ongoing;
@@ -54,13 +54,13 @@ Game::State Game::update_state(const int placed_unit, const int x, const int y){
     if (       count_chain(*placed_cell, Cell::right, placed_unit)       >= win_
             || count_chain(*placed_cell, Cell::down_right, placed_unit)  >= win_
             || count_chain(*placed_cell, Cell::down, placed_unit)        >= win_){
-        state_ = ended;
         if (placed_unit == 1){
             result_ = player1_win;
 
         } else {
             result_ = player2_win;
         }
+        state_ = ended;
         return ended;
     } else {
         if (length_ < size_*size_){
@@ -84,10 +84,10 @@ Cell* Game::get_cell(int x, int y){
 vector<vector<int>> Game::get_board() const
 {
     vector<vector<int>> result;
-    for (int i = 0; i < size_; i++){
+    for (int y = 0; y < size_; y++){
         vector<int> row;
-        for (int j = 0; j < size_; j++){
-            row.push_back(board_.at(j).at(i).get_value());
+        for (int x = 0; x< size_; x++){
+            row.push_back(board_.at(y).at(x).get_value());
         }
         result.push_back(row);
     }
