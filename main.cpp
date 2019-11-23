@@ -1,6 +1,7 @@
 #include "game/game.h"
 #include "filehandler/filehandler.h"
 #include "network/neuralnetwork.h"
+#include "trainer/trainer.h"
 #include <iostream>
 #include <vector>
 
@@ -29,15 +30,13 @@ int main()
 {
 
     filehandler fh;
-    Game gm = Game(4, 2);
-    place(gm, 0, 0, 1);
-    place(gm, 1, 0, 1);
-    place(gm, 1, 1, 1);
-    place(gm, 0, 1, 1);
-    NeuralNetwork nn;
-    fh.load(nn, "nnfiles/test.nn");
-    vector<float> output = nn.make_move(gm.get_board());
-    print_output(output);
-
+    Game gm = Game(4, 3);
+    NeuralNetwork nn(4,1,2,1);
+    nn.randomize();
+    Trainer trainer(nn, 10, gm, 1, 1);
+    for (int i = 0; i < 6; i++){
+        trainer.iterate(2);
+        fh.save(trainer.get_winner(), "nnfiles/gen_test_" + to_string(i + 1) + ".nn");
+    }
     return 0;
 }

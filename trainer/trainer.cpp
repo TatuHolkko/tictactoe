@@ -1,7 +1,10 @@
 #include "trainer.h"
 #include <random>
 #include <cmath>
+#include <iostream>
 #include <numeric>
+
+using namespace std;
 
 Trainer::Trainer(NeuralNetwork &ancestor,
                  int pool_size,
@@ -29,9 +32,16 @@ Trainer::Trainer(NeuralNetwork &ancestor,
 void Trainer::iterate(int n)
 {
     for (int iteration = 0; iteration < n; iteration++){
+        cout << "gen" << iteration << endl;
         copy_and_mutate_all();
         score_all();
+        pick_winner();
     }
+}
+
+const NeuralNetwork& Trainer::get_winner() const
+{
+    return winner_->network;
 }
 
 void Trainer::copy_and_mutate_all()
@@ -140,5 +150,21 @@ pair<int, int> Trainer::get_move(const vector<float>& dist) const
         y = placed_on / game_->get_side_length();
     }
     return make_pair(x, y);
+}
+
+void Trainer::pick_winner()
+{
+    //just pick any score here
+    int max_score = winner_->score;
+    //loop through all competitors and reassign winner and top score whenever
+    //a new winner is found
+    for(vector<Competitor>::iterator player = network_pool_.begin();
+        player < network_pool_.end();
+        player++){
+        if (player->score > max_score){
+            max_score = player->score;
+            winner_ = player;
+        }
+    }
 }
 

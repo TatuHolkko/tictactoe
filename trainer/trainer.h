@@ -25,6 +25,10 @@ public:
      * winner for the next iteration.
      */
     void iterate(int n);
+
+    //return the current winner
+    const NeuralNetwork& get_winner() const;
+
 private:
     /* a data type for tracking a network's score during
      * genetic iteration
@@ -61,6 +65,9 @@ private:
      * distribuiton
      */
     pair<int, int> get_move(const vector<float>& dist) const;
+
+    //set winner_ to point to the competitor with the highest score
+    void pick_winner();
 };
 
 #endif // TRAINER_H
