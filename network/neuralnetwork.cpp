@@ -214,7 +214,10 @@ const vector<vector<float>>& NeuralNetwork::get_output_weights() const
 
 float NeuralNetwork::activation_function(float x)
 {
-    return x;
+    if (x > 0){
+        return x;
+    }
+    return 0;
 }
 
 float NeuralNetwork::random_number(){
