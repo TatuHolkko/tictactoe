@@ -1,5 +1,6 @@
 #include "trainer.h"
 #include <random>
+#include <cmath>
 
 Trainer::Trainer(NeuralNetwork &ancestor,
                  int pool_size,
@@ -42,6 +43,7 @@ void Trainer::copy_and_mutate_all()
         if (comp != winner_){
             comp->network.make_equal_to(winner_->network);
             comp->network.mutate(mutation_scale_);
+
         }
     }
 }
@@ -88,10 +90,10 @@ void Trainer::play_match(const NeuralNetwork& player1, const NeuralNetwork& play
 void Trainer::score_players(Trainer::Competitor& player1, Trainer::Competitor& player2)
 {
     Game::Result result = game_->get_result();
-    int max_game_length = game_->get_side_length()^2;
+    int max_game_length = pow(game_->get_side_length(), 2);
     int length = game_->get_length();
-    int winner_score = 100 - 25*(length/max_game_length);
-    int loser_score = -100 + 50*(length/max_game_length);
+    int winner_score = 100 - 25*((float)length/max_game_length);
+    int loser_score = -100 + 50*((float)length/max_game_length);
 
     if (result == Game::player1_win){
         player1.score += winner_score;
