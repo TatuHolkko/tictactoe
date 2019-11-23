@@ -29,7 +29,6 @@ void Trainer::iterate(int n)
     for (int iteration = 0; iteration < n; iteration++){
         copy_and_mutate_all();
         score_all();
-
     }
 }
 
@@ -38,6 +37,8 @@ void Trainer::copy_and_mutate_all()
     for(vector<Competitor>::iterator comp = network_pool_.begin();
         comp < network_pool_.end();
         comp++){
+
+        comp->score = 0;
         if (comp != winner_){
             comp->network.make_equal_to(winner_->network);
             comp->network.mutate(mutation_scale_);
