@@ -108,8 +108,8 @@ bool Game::place(int unit, int x, int y){
         return false;
     }
     board_.at(y).at(x).set_value(unit);
-    update_state(unit, x, y);
     length_++;
+    update_state(unit, x, y);
     return true;
 }
 
