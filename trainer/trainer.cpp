@@ -70,6 +70,9 @@ void Trainer::test_winner()
         }
     }
     cout << "--------" << endl;
+    cout << game_->get_result();
+    cout << "--------" << endl;
+
 }
 
 void Trainer::copy_and_mutate_all()
