@@ -85,7 +85,7 @@ void Trainer::play_match(const NeuralNetwork& player1, const NeuralNetwork& play
     const NeuralNetwork* current_player = &player1;
     int unit = 1;
     while(game_->get_state() == Game::ongoing){
-        vector<float> output = current_player->make_move(game_->get_board());
+        vector<float> output = current_player->make_move(game_->get_board(unit));
         pair<int, int> unit_location = get_move(output);
         game_->place(unit, unit_location.first, unit_location.second);
         if (current_player == &player1){

@@ -33,8 +33,13 @@ public:
     void reset();
     //return a pointer to cell at (x, y)
     Cell* get_cell(int x, int y);
-    //return grid
-    vector<vector<int>> get_board() const;
+    /* return grid from perspective of a player
+     *
+     * <friendly_unit>: the viewing player's unit
+     * returns a grid where ones represent friendly units and twos represent
+     * opponent's units
+     */
+    vector<vector<int>> get_board(const int friendly_unit) const;
     //print the board
     void print() const;
     /* place a unit into the board

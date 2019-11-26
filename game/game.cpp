@@ -81,13 +81,22 @@ Cell* Game::get_cell(int x, int y){
     return &board_.at(y).at(x);
 }
 
-vector<vector<int>> Game::get_board() const
+vector<vector<int>> Game::get_board(const int friendly_unit) const
 {
     vector<vector<int>> result;
     for (int y = 0; y < size_; y++){
         vector<int> row;
         for (int x = 0; x< size_; x++){
-            row.push_back(board_.at(y).at(x).get_value());
+            int value = board_.at(y).at(x).get_value();
+            if (value == 0){
+                row.push_back(0);
+            } else if (value == friendly_unit){
+                //own unit
+                row.push_back(1);
+            } else {
+                //opponent's unit
+                row.push_back(2);
+            }
         }
         result.push_back(row);
     }
