@@ -57,23 +57,19 @@ int count_chain(Cell& start, Cell::Direction direction, int value){
     Cell* current = start.next(direction);
 
     while(current != nullptr){
-        if (current->get_value() == 0){
+        if (current->get_value() != value){
             break;
         }
-        if (current->get_value() == value){
-            chain++;
-        }
+        chain++;
         current = current->next(direction);
     }
     //check in the opposite direction
     current = start.next(opposite);
     while(current != nullptr){
-        if (current->get_value() == 0){
+        if (current->get_value() != value){
             break;
         }
-        if (current->get_value() == value){
-            chain++;
-        }
+        chain++;
         current = current->next(opposite);
     }
     return chain;
