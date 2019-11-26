@@ -10,7 +10,8 @@ Trainer::Trainer(NeuralNetwork &ancestor,
                  int pool_size,
                  Game& game,
                  float mutation_scale,
-                 int matches_per_opponent):
+                 int matches_per_opponent,
+                 bool randomize):
     winner_(nullptr),
     game_(&game),
     mutation_scale_(mutation_scale),
@@ -24,9 +25,17 @@ Trainer::Trainer(NeuralNetwork &ancestor,
                                         ancestor.get_hidden_weights(),
                                         ancestor.get_output_weights()),
                           0};
+        if (randomize){
+            comp.network.randomize();
+        }
         network_pool_.push_back(comp);
     }
-    winner_ = network_pool_.begin();
+    if (randomize){
+        score_all();
+        pick_winner();
+    } else {
+        winner_ = network_pool_.begin();
+    }
 }
 
 void Trainer::iterate(int n)

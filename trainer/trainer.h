@@ -9,13 +9,19 @@ class Trainer
 {
 public:
     /* create a trainer for neural networks with <pool_size> copies
-     * of <ancestor> fighting in each generation
+     * of <ancestor> fighting in each iteration
+     *
+     * if <randomize> is set, randomize each network after copying
+     * and run one iteration to score the randomized networks and
+     * set the winner
      */
     Trainer(NeuralNetwork& ancestor,
             int pool_size,
             Game& game,
             float mutation_scale,
-            int matches_per_opponent);
+            int matches_per_opponent,
+            bool randomize=false);
+
     /* iterate <n> generations of evolutionary progress
      *
      * In a single iteration the entire pool of neural networks

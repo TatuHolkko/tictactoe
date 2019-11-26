@@ -32,8 +32,7 @@ int main()
     filehandler fh;
     Game gm = Game(4, 3);
     NeuralNetwork nn(4,1,16,3);
-    nn.randomize();
-    Trainer trainer(nn, 10, gm, 1, 50);
+    Trainer trainer(nn, 10, gm, 1, 50, true);
     for (int i = 0; i < 6; i++){
         trainer.iterate(10);
         trainer.test_winner();
