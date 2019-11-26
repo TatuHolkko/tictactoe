@@ -55,6 +55,13 @@ private:
     Game* game_;
     //maximum mutation of each weight on each iteration
     float mutation_scale_;
+
+    //self descriptive info about last iteration
+    int avg_score_ = 0;
+    int top_score_ = 0;
+    int avg_length_ = 0;
+    int iteration_number_ = 0;
+
     //how many matches per opponent each competitor plays
     int matches_per_opponent_;
     //make all competitiors mutated copies of the last winner
@@ -78,7 +85,11 @@ private:
     //set winner_ to point to the competitor with the highest score
     void pick_winner();
 
+    //get an x y pair from command line
     pair<int, int> get_move_cli();
+
+    //print info about the last iteration
+    void info();
 };
 
 #endif // TRAINER_H

@@ -21,9 +21,10 @@ Trainer::Trainer(NeuralNetwork &ancestor,
     network_pool_.reserve(pool_size);
 
     for (int i = 0; i < pool_size; i++){
-        Competitor comp ={NeuralNetwork(ancestor.get_kernel_weights(),
-                                        ancestor.get_hidden_weights(),
-                                        ancestor.get_output_weights()),
+        Competitor comp ={NeuralNetwork(
+                          ancestor.get_kernel_weights(),
+                          ancestor.get_hidden_weights(),
+                          ancestor.get_output_weights()),
                           0};
         if (randomize){
             comp.network.randomize();
@@ -40,10 +41,12 @@ Trainer::Trainer(NeuralNetwork &ancestor,
 void Trainer::iterate(int n)
 {
     for (int iteration = 0; iteration < n; iteration++){
-        cout << "gen" << iteration << endl;
+        iteration_number_++;
         copy_and_mutate_all();
         score_all();
         pick_winner();
+        info();
+
     }
 }
 
@@ -93,13 +96,15 @@ void Trainer::copy_and_mutate_all()
         if (comp != winner_){
             comp->network.make_equal_to(winner_->network);
             comp->network.mutate(mutation_scale_);
-
         }
     }
 }
 
 void Trainer::score_all()
 {
+    int total_matches = 0;
+    int length_sum = 0;
+    int score_sum = 0;
     for(vector<Competitor>::iterator player = network_pool_.begin();
         player < network_pool_.end();
         player++){
@@ -109,13 +114,19 @@ void Trainer::score_all()
             //dont play against self
             if (opponent != player){
                 for (int match = 0; match < matches_per_opponent_; match++){
+
                     play_match(player->network, opponent->network);
                     score_players(*player, *opponent);
-                }
 
+                    total_matches++;
+                    length_sum += game_->get_length();
+                }
             }
         }
+        score_sum += player->score;
     }
+    avg_length_ = (float)length_sum/total_matches;
+    avg_score_ = score_sum/total_matches;
 }
 
 void Trainer::play_match(const NeuralNetwork& player1, const NeuralNetwork& player2)
@@ -205,6 +216,7 @@ void Trainer::pick_winner()
             winner_ = player;
         }
     }
+    top_score_ = winner_->score;
 }
 
 pair<int, int> Trainer::get_move_cli()
@@ -216,5 +228,14 @@ pair<int, int> Trainer::get_move_cli()
     getchar();
     cin >> y;
     return make_pair(x, y);
+}
+
+void Trainer::info()
+{
+    cout << "generation " << iteration_number_ << ":"
+         << " top: " << top_score_
+         << " avg: " << avg_score_
+         << " len: " << avg_length_
+         << endl;
 }
 
