@@ -31,12 +31,12 @@ int main()
 
     filehandler fh;
     Game gm = Game(4, 3);
-    NeuralNetwork nn(4,1,2,1);
+    NeuralNetwork nn(4,1,16,3);
     nn.randomize();
-    Trainer trainer(nn, 10, gm, 1, 1);
+    Trainer trainer(nn, 10, gm, 1, 50);
     for (int i = 0; i < 6; i++){
-        trainer.iterate(2);
-        fh.save(trainer.get_winner(), "nnfiles/gen_test_" + to_string(i + 1) + ".nn");
+        trainer.iterate(10);
+        trainer.test_winner();
     }
     return 0;
 }

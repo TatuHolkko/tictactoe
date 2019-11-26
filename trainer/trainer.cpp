@@ -44,6 +44,34 @@ const NeuralNetwork& Trainer::get_winner() const
     return winner_->network;
 }
 
+void Trainer::test_winner()
+{
+    game_->reset();
+    cout << "--------" << endl;
+    game_->print();
+    int player = 1;
+    while(game_->get_state() == Game::ongoing){
+        pair<int, int> move;
+        if (player == 1){
+            move = get_move_cli();
+        } else {
+            vector<float> output = winner_->network.make_move(game_->get_board(player));
+            move = get_move(output);
+        }
+
+        game_->place(player, move.first, move.second);
+        cout << "--------" << endl;
+        game_->print();
+
+        if (player == 1){
+            player  = 2;
+        } else {
+            player = 1;
+        }
+    }
+    cout << "--------" << endl;
+}
+
 void Trainer::copy_and_mutate_all()
 {
     for(vector<Competitor>::iterator comp = network_pool_.begin();
@@ -166,5 +194,16 @@ void Trainer::pick_winner()
             winner_ = player;
         }
     }
+}
+
+pair<int, int> Trainer::get_move_cli()
+{
+    cout << "x y=";
+    int x;
+    int y;
+    cin >> x;
+    getchar();
+    cin >> y;
+    return make_pair(x, y);
 }
 

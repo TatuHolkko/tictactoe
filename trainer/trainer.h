@@ -29,6 +29,9 @@ public:
     //return the current winner
     const NeuralNetwork& get_winner() const;
 
+    //play against the winner ai through a cli
+    void test_winner();
+
 private:
     /* a data type for tracking a network's score during
      * genetic iteration
@@ -68,6 +71,8 @@ private:
 
     //set winner_ to point to the competitor with the highest score
     void pick_winner();
+
+    pair<int, int> get_move_cli();
 };
 
 #endif // TRAINER_H
