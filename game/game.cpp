@@ -53,6 +53,7 @@ Game::State Game::update_state(const int placed_unit, const int x, const int y){
     //check chain lenghts in all directions
     if (       count_chain(*placed_cell, Cell::right, placed_unit)       >= win_
             || count_chain(*placed_cell, Cell::down_right, placed_unit)  >= win_
+            || count_chain(*placed_cell, Cell::down_left, placed_unit)   >= win_
             || count_chain(*placed_cell, Cell::down, placed_unit)        >= win_){
         if (placed_unit == 1){
             result_ = player1_win;
