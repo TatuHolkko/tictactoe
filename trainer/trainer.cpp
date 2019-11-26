@@ -30,11 +30,10 @@ Trainer::Trainer(NeuralNetwork &ancestor,
         }
         network_pool_.push_back(comp);
     }
+    winner_ = network_pool_.begin();
     if (randomize){
         score_all();
         pick_winner();
-    } else {
-        winner_ = network_pool_.begin();
     }
 }
 
@@ -73,7 +72,7 @@ void Trainer::test_winner()
         game_->print();
 
         if (player == 1){
-            player  = 2;
+            player = 2;
         } else {
             player = 1;
         }
