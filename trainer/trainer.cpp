@@ -11,10 +11,12 @@ Trainer::Trainer(NeuralNetwork &ancestor,
                  Game& game,
                  float mutation_scale,
                  int matches_per_opponent,
-                 bool randomize):
+                 bool randomize,
+                 bool start_random):
     winner_(nullptr),
     game_(&game),
     mutation_scale_(mutation_scale),
+    start_random_(start_random),
     matches_per_opponent_(matches_per_opponent)
 {
     network_pool_ = {};
@@ -134,6 +136,11 @@ void Trainer::play_match(const NeuralNetwork& player1, const NeuralNetwork& play
     game_->reset();
     const NeuralNetwork* current_player = &player1;
     int unit = 1;
+    if(start_random_){
+        game_->place_random(1);
+        unit  = 2;
+        current_player = &player2;
+    }
     while(game_->get_state() == Game::ongoing){
         vector<float> output = current_player->make_move(game_->get_board(unit));
         pair<int, int> unit_location = get_move(output);

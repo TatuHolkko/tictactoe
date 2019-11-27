@@ -47,6 +47,11 @@ public:
      */
     bool place(int unit, int x, int y);
 
+    /* place a unit into the board at a random position
+     * return true if the move was legal and executed
+     */
+    bool place_random(int unit);
+
     //return true if board is empty at x, y
     bool can_place(int x, int y) const;
 

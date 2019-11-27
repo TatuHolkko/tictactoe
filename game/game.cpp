@@ -3,6 +3,7 @@
 #include "gridhelper.cpp"
 #include <vector>
 #include <iostream>
+#include <random>
 
 using namespace std;
 
@@ -121,6 +122,13 @@ bool Game::place(int unit, int x, int y){
     length_++;
     update_state(unit, x, y);
     return true;
+}
+
+bool Game::place_random(int unit)
+{
+    int x = rand() % size_;
+    int y = rand() % size_;
+    return place(unit, x, y);
 }
 
 bool Game::can_place(int x, int y) const

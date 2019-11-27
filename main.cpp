@@ -31,11 +31,10 @@ int main()
 
     filehandler fh;
     Game gm = Game(4, 3);
-    NeuralNetwork nn(4,1,16,5);
-    nn.randomize();
-    Trainer trainer(nn, 50, gm, 0.2, 50);
-    for (int i = 0; i < 100; i++){
-        trainer.iterate(10);
+    NeuralNetwork nn(4,1,10,5);
+    Trainer trainer(nn, 30, gm, 0.2, 50, true);
+    for (int i = 0; i < 300; i++){
+        trainer.iterate(3);
         fh.save(trainer.get_winner(), "../tictactoe/nnfiles/temp.nn");
     }
     trainer.test_winner();

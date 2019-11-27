@@ -20,7 +20,8 @@ public:
             Game& game,
             float mutation_scale,
             int matches_per_opponent,
-            bool randomize=false);
+            bool randomize=false,
+            bool start_random=true);
 
     /* iterate <n> generations of evolutionary progress
      *
@@ -55,6 +56,9 @@ private:
     Game* game_;
     //maximum mutation of each weight on each iteration
     float mutation_scale_;
+
+    //if true, force a random first unit on board
+    bool start_random_;
 
     //self descriptive info about last iteration
     int avg_score_ = 0;
