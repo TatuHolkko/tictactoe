@@ -167,8 +167,8 @@ void Trainer::score_players(Trainer::Competitor& player1, Trainer::Competitor& p
     Game::Result result = game_->get_result();
     int max_game_length = pow(game_->get_side_length(), 2);
     int length = game_->get_length();
-    int winner_score = 100 - 25*((float)length/max_game_length);
-    int loser_score = -100 + 50*((float)length/max_game_length);
+    int winner_score = 100 - 75*((float)length/max_game_length);
+    int loser_score = -100 + 100*((float)length/max_game_length);
 
     if (result == Game::player1_win){
         player1.score += winner_score;
