@@ -46,6 +46,20 @@ public:
     const vector<vector<float>>& get_hidden_weights() const;
     const vector<vector<float>>& get_output_weights() const;
 
+    /* get a weight with indexes
+     *
+     * <layer> 0: kernels, 1: hidden layer, 2: output layer
+     * <node> index of the node or kernel
+     * <weight> index of the weight
+     */
+    float weight_at(int layer, int node, int weight) const;
+    /* set a weight with indexes
+     *
+     * <layer> 0: kernels, 1: hidden layer, 2: output layer
+     * <node> index of the node or kernel
+     * <weight> index of the weight
+     */
+    void set_weight_at(int layer, int node, int weight, float value);
 
 private:
     //game grid side length

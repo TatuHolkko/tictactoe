@@ -212,6 +212,28 @@ const vector<vector<float>>& NeuralNetwork::get_output_weights() const
     return output_weights_;
 }
 
+float NeuralNetwork::weight_at(int layer, int node, int weight) const
+{
+    if (layer == 0){
+        return kernels_.at(node).at(weight);
+    } else if (layer == 1) {
+        return hidden_layer_weights_.at(node).at(weight);
+    } else {
+        return output_weights_.at(node).at(weight);
+    }
+}
+
+void NeuralNetwork::set_weight_at(int layer, int node, int weight, float value)
+{
+    if (layer == 0){
+        kernels_.at(node).at(weight) = value;
+    } else if (layer == 1) {
+        hidden_layer_weights_.at(node).at(weight) = value;
+    } else {
+        output_weights_.at(node).at(weight) = value;
+    }
+}
+
 float NeuralNetwork::activation_function(float x)
 {
     if (x > 0){

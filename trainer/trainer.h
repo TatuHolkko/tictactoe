@@ -71,6 +71,9 @@ private:
     {
         NeuralNetwork network;
         int score;
+        bool operator <(const Competitor& rhs){
+            return this->score < rhs.score;
+        }
     };
     //average network of the last iterations top scoring networks
     NeuralNetwork winner_;

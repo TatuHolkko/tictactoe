@@ -28,14 +28,15 @@ void print_output(const vector<float>& output){
 
 int main()
 {
-
     filehandler fh;
     Game gm = Game(4, 3);
-    NeuralNetwork nn(4,1,10,5);
-    Trainer trainer(nn, 30, gm, 0.2, 50, true);
+    //NeuralNetwork nn(4,1,10,5);
+    NeuralNetwork nn;
+    fh.load(nn, "../tictactoe/nnfiles/temp.nn");
+    Trainer trainer(nn, 30, gm, 0.5, 50, 10, true);
     for (int i = 0; i < 300; i++){
-        trainer.iterate(3);
-        fh.save(trainer.get_winner(), "../tictactoe/nnfiles/temp.nn");
+        trainer.iterate(30);
+        fh.save(trainer.get_winner(), "../tictactoe/nnfiles/temp" + to_string(i*30) + ".nn");
     }
     trainer.test_winner();
     return 0;
