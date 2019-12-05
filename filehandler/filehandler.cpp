@@ -96,6 +96,7 @@ bool filehandler::load(NeuralNetwork& nn, const string& path)
     }
     input.close();
     nn.initialize_from(kernels, hidden_layer_weights, output_weights);
+    cout << "file reading done" << endl;
     return true;
 }
 
