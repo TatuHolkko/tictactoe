@@ -11,15 +11,39 @@ public:
     /* create a trainer for neural networks with <pool_size> copies
      * of <ancestor> fighting in each iteration
      *
-     * if <randomize> is set, randomize each network after copying
-     * and run one iteration to score the randomized networks and
-     * set the winner
+     * <ancestor>:  if <randomize> is false, all networks are copies of this network
+     *              it <randomize> is true, the network architecture is copied from
+     *              this network and all weights are randomized
+     *
+     * <pool_size>: determines how many networks play against each other
+     *              in every iteration
+     *
+     * <game>:      the game engine
+     *
+     * <mutation_scale>:    all networks are mutated by adding a random number between
+     *                      <mutation_scale> and -<mutation_scale> to all weights
+     *
+     * <matches_per_opponent>:  each network will play this many matches against all
+     *                          other networks. they will play as first player
+     *                          and as second player so the total matches against a
+     *                          single network is twice this amount
+     *
+     * <winner_pool_size>:      number of top scoring networks to average to create the
+     *                          winner of each iteration
+     *
+     * <randomize>:     if true, all networks will start with random weights instead of
+     *                  being copies of <ancestor>
+     *
+     * <start_random>:  if true, the first move of each game is forced random to increase
+     *                  diversity in games
+     *
      */
     Trainer(NeuralNetwork& ancestor,
             int pool_size,
             Game& game,
             float mutation_scale,
             int matches_per_opponent,
+            int winner_pool_size,
             bool randomize=false,
             bool start_random=true);
 
@@ -48,17 +72,14 @@ private:
         NeuralNetwork network;
         int score;
     };
-    //iterator pointing to the last iteration's winner competitor
-    vector<Competitor>::iterator winner_;
+    //average network of the last iterations top scoring networks
+    NeuralNetwork winner_;
     //pool of neural networks that compete against each other
     vector<Competitor> network_pool_;
     //pointer to the game to be used
     Game* game_;
     //maximum mutation of each weight on each iteration
     float mutation_scale_;
-
-    //if true, force a random first unit on board
-    bool start_random_;
 
     //self descriptive info about last iteration
     int avg_score_ = 0;
@@ -68,6 +89,13 @@ private:
 
     //how many matches per opponent each competitor plays
     int matches_per_opponent_;
+
+    //number of top scoring networks to average after each iteration
+    int winner_pool_size_;
+
+    //if true, force a random first unit on board
+    bool start_random_;
+
     //make all competitiors mutated copies of the last winner
     void copy_and_mutate_all();
     //score all competitors against all others

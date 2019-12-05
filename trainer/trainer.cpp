@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <numeric>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,13 +12,14 @@ Trainer::Trainer(NeuralNetwork &ancestor,
                  Game& game,
                  float mutation_scale,
                  int matches_per_opponent,
+                 int winner_pool_size,
                  bool randomize,
                  bool start_random):
-    winner_(nullptr),
     game_(&game),
     mutation_scale_(mutation_scale),
-    start_random_(start_random),
-    matches_per_opponent_(matches_per_opponent)
+    matches_per_opponent_(matches_per_opponent),
+    winner_pool_size_(winner_pool_size),
+    start_random_(start_random)
 {
     network_pool_ = {};
     network_pool_.reserve(pool_size);
@@ -33,7 +35,10 @@ Trainer::Trainer(NeuralNetwork &ancestor,
         }
         network_pool_.push_back(comp);
     }
-    winner_ = network_pool_.begin();
+    winner_ = NeuralNetwork();
+    winner_.initialize_from(network_pool_.begin()->network.get_kernel_weights(),
+                            network_pool_.begin()->network.get_hidden_weights(),
+                            network_pool_.begin()->network.get_output_weights());
     if (randomize){
         score_all();
         pick_winner();
@@ -54,7 +59,7 @@ void Trainer::iterate(int n)
 
 const NeuralNetwork& Trainer::get_winner() const
 {
-    return winner_->network;
+    return winner_;
 }
 
 void Trainer::test_winner()
@@ -68,7 +73,7 @@ void Trainer::test_winner()
         if (player == 1){
             move = get_move_cli();
         } else {
-            vector<float> output = winner_->network.make_move(game_->get_board(player));
+            vector<float> output = winner_.make_move(game_->get_board(player));
             move = get_move(output);
         }
 
@@ -95,8 +100,10 @@ void Trainer::copy_and_mutate_all()
         comp++){
 
         comp->score = 0;
-        if (comp != winner_){
-            comp->network.make_equal_to(winner_->network);
+        comp->network.make_equal_to(winner_);
+        //leave first network unaltered so that there is at least one copy
+        //of the winner in the pool
+        if (comp != network_pool_.begin()){
             comp->network.mutate(mutation_scale_);
         }
     }
@@ -211,19 +218,18 @@ pair<int, int> Trainer::get_move(const vector<float>& dist) const
 
 void Trainer::pick_winner()
 {
-    //just pick any score here
-    int max_score = winner_->score;
+    vector<Competitor>::iterator top_competitor = network_pool_.begin();
     //loop through all competitors and reassign winner and top score whenever
     //a new winner is found
     for(vector<Competitor>::iterator player = network_pool_.begin();
         player < network_pool_.end();
         player++){
-        if (player->score > max_score){
-            max_score = player->score;
-            winner_ = player;
+        if (player->score > top_competitor->score){
+            top_competitor = player;
         }
     }
-    top_score_ = winner_->score;
+    winner_.make_equal_to(top_competitor->network);
+    top_score_ = top_competitor->score;
 }
 
 pair<int, int> Trainer::get_move_cli()
