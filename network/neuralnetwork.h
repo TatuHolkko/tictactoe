@@ -27,6 +27,9 @@ public:
     /* feed game board state to the network and calculate the output
      * probability distribution where this network would place it's
      * next unit
+     *
+     * returns: a flattened distribution vector. if the board is n x m
+     * matrix, the distribution vector will be a vector of length n*m
      */
     vector<float> make_move(const vector<vector<int>>& game_grid) const;
     //nudge all weights randomly

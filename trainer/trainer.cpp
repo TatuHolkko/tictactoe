@@ -239,8 +239,9 @@ pair<int, int> Trainer::get_move_cli()
 
 void Trainer::info()
 {
+    int matches_per_player = 2 * (network_pool_.size() - 1) * matches_per_opponent_;
     cout << "generation " << iteration_number_ << ":"
-         << " top: " << top_score_
+         << " top: " << top_score_/matches_per_player
          << " avg: " << avg_score_
          << " len: " << avg_length_
          << endl;
