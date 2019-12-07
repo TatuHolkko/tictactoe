@@ -30,13 +30,13 @@ int main()
 {
     filehandler fh;
     Game gm = Game(4, 3);
-    //NeuralNetwork nn(4,1,10,5);
-    NeuralNetwork nn;
-    fh.load(nn, "../tictactoe/nnfiles/temp.nn");
-    Trainer trainer(nn, 30, gm, 0.5, 50, 10, true);
+    NeuralNetwork nn(4,1,18,5);
+    //NeuralNetwork nn;
+    //fh.load(nn, "../tictactoe/nnfiles/train-hidden18-mut2-gen90.nn");
+    Trainer trainer(nn, 20, gm, 0.2, 70, 5, true);
     for (int i = 0; i < 300; i++){
         trainer.iterate(30);
-        fh.save(trainer.get_winner(), "../tictactoe/nnfiles/temp" + to_string(i*30) + ".nn");
+        fh.save(trainer.get_winner(), "../tictactoe/nnfiles/train-hidden18-mut2-gen" + to_string((i+1)*30) + ".nn");
     }
     trainer.test_winner();
     return 0;
