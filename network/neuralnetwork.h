@@ -2,6 +2,7 @@
 #define NEURALNETWORK_H
 #include <vector>
 #include <string>
+#include <random>
 
 using namespace std;
 
@@ -78,10 +79,15 @@ private:
     vector<vector<float>> hidden_layer_weights_ = {};
     //output weights
     vector<vector<float>> output_weights_ = {};
+    //normal distribution used by the random_normal function
+    normal_distribution<double> norm_dist_ = normal_distribution<double>(0.0,1.0);
+    default_random_engine rand_eng_;
     //activation function
     static float activation_function(float x);
-    //random weight function
+    //random number between -1 and 1
     static float random_number();
+    //random number with normal distribution around zero with stddev 1
+    float random_normal();
     //return the result of a kernel applied to a point
     static float apply_kernel(const vector<vector<int> > &game_grid, const vector<float> kernel, const int kernel_radius, const int x0, const int y0);
 };

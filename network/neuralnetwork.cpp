@@ -1,5 +1,6 @@
 #include "neuralnetwork.h"
 #include <cmath>
+#include <chrono>
 #include <random>
 
 NeuralNetwork::NeuralNetwork():
@@ -12,7 +13,8 @@ NeuralNetwork::NeuralNetwork():
     hidden_layer_weights_({}),
     output_weights_({})
 {
-
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    rand_eng_ = default_random_engine(seed);
 }
 
 NeuralNetwork::NeuralNetwork(int grid_diameter,
@@ -132,17 +134,17 @@ void NeuralNetwork::mutate(float scale)
     vector<float>::iterator it2;
     for (it1 = kernels_.begin(); it1 < kernels_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 += random_number() * scale;
+            *it2 += random_normal() * scale;
         }
     }
     for (it1 = hidden_layer_weights_.begin(); it1 < hidden_layer_weights_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 += random_number() * scale;
+            *it2 += random_normal() * scale;
         }
     }
     for (it1 = output_weights_.begin(); it1 < output_weights_.end(); it1++){
         for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 += random_number() * scale;
+            *it2 += random_normal() * scale;
         }
     }
 }
@@ -244,6 +246,11 @@ float NeuralNetwork::activation_function(float x)
 
 float NeuralNetwork::random_number(){
     return rand() % 10000 / 5000.0 - 1;
+}
+
+float NeuralNetwork::random_normal()
+{
+    return (float)norm_dist_(rand_eng_);
 }
 
 float NeuralNetwork::apply_kernel(const vector<vector<int>> &game_grid,
