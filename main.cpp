@@ -38,6 +38,6 @@ int main()
         trainer.iterate(30);
         fh.save(trainer.get_winner(), "../tictactoe/nnfiles/train-hidden18-mut2-gen" + to_string((i+1)*30) + ".nn");
     }
-    trainer.test_winner();
+    trainer.play_winner();
     return 0;
 }

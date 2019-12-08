@@ -61,7 +61,7 @@ public:
     const NeuralNetwork& get_winner() const;
 
     //play against the winner ai through a cli
-    void test_winner();
+    void play_winner();
 
 private:
     /* a data type for tracking a network's score during

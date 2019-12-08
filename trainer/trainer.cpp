@@ -62,7 +62,7 @@ const NeuralNetwork& Trainer::get_winner() const
     return winner_;
 }
 
-void Trainer::test_winner()
+void Trainer::play_winner()
 {
     game_->reset();
     cout << "--------" << endl;
