@@ -32,11 +32,12 @@ int main()
     Game gm = Game(4, 3);
     NeuralNetwork nn(4,1,18,5);
     //NeuralNetwork nn;
-    //fh.load(nn, "../tictactoe/nnfiles/train-hidden18-mut2-gen90.nn");
-    Trainer trainer(nn, 20, gm, 0.2, 70, 5, true);
+    //fh.load(nn, "../tictactoe/nnfiles/train-hidden18-mut2-gen1110.nn");
+    Trainer trainer(nn, 30, gm, 0.1, 100, 3, true);
     for (int i = 0; i < 300; i++){
         trainer.iterate(30);
-        fh.save(trainer.get_winner(), "../tictactoe/nnfiles/train-hidden18-mut2-gen" + to_string((i+1)*30) + ".nn");
+        trainer.showcase_winner();
+        fh.save(trainer.get_winner(), "../tictactoe/nnfiles/train-hidden18-mut1-gen" + to_string((i+1)*30) + ".nn");
     }
     trainer.play_winner();
     return 0;

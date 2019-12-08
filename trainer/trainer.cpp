@@ -93,6 +93,11 @@ void Trainer::play_winner()
 
 }
 
+void Trainer::showcase_winner()
+{
+    play_match(winner_, winner_, true);
+}
+
 void Trainer::copy_and_mutate_all()
 {
     for(vector<Competitor>::iterator comp = network_pool_.begin();
@@ -138,7 +143,7 @@ void Trainer::score_all()
     avg_score_ = score_sum/total_matches;
 }
 
-void Trainer::play_match(const NeuralNetwork& player1, const NeuralNetwork& player2)
+void Trainer::play_match(const NeuralNetwork& player1, const NeuralNetwork& player2, bool print)
 {
     game_->reset();
     const NeuralNetwork* current_player = &player1;
@@ -152,13 +157,20 @@ void Trainer::play_match(const NeuralNetwork& player1, const NeuralNetwork& play
         vector<float> output = current_player->make_move(game_->get_board(unit));
         pair<int, int> unit_location = get_move(output);
         game_->place(unit, unit_location.first, unit_location.second);
-        if (current_player == &player1){
+        if (unit == 1){
             unit  = 2;
             current_player = &player2;
         } else {
             unit = 1;
             current_player = &player1;
         }
+        if (print) {
+            cout << "--------" << endl;
+            game_->print();
+        }
+    }
+    if (print){
+        cout << "--------" << endl;
     }
 }
 

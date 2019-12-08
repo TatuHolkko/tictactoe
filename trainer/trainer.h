@@ -63,6 +63,9 @@ public:
     //play against the winner ai through a cli
     void play_winner();
 
+    //show an example game from the winner network
+    void showcase_winner();
+
 private:
     /* a data type for tracking a network's score during
      * genetic iteration
@@ -105,7 +108,8 @@ private:
     void score_all();
     //play a single game
     void play_match(const NeuralNetwork& player1,
-                    const NeuralNetwork& player2);
+                    const NeuralNetwork& player2,
+                    bool print = false);
     /* change the scores of the last players according to the
      * state that the game was left after the last game finished
      */
