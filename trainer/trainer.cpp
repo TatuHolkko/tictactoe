@@ -98,6 +98,11 @@ void Trainer::showcase_winner()
     play_match(winner_, winner_, true);
 }
 
+void Trainer::set_generation(int generation)
+{
+    iteration_number_ = generation;
+}
+
 void Trainer::copy_and_mutate_all()
 {
     for(vector<Competitor>::iterator comp = network_pool_.begin();

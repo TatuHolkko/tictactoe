@@ -66,6 +66,9 @@ public:
     //show an example game from the winner network
     void showcase_winner();
 
+    //set the generation for information printing
+    void set_generation(int generation);
+
 private:
     /* a data type for tracking a network's score during
      * genetic iteration
