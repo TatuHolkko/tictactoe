@@ -122,8 +122,12 @@ vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid) con
         for (int hidd_neur = 0; hidd_neur < hidden_layer_size_; hidd_neur++){
             sum += hidden_activations.at(hidd_neur) * output_weights_.at(output).at(hidd_neur);
         }
-        float bias = output_weights_.at(output).back();
-        outputs.push_back(activation_function(sum + bias));
+        if (REMOVE_OUTPUT_BIAS){
+            outputs.push_back(activation_function(sum));
+        } else {
+            float bias = output_weights_.at(output).back();
+            outputs.push_back(activation_function(sum + bias));
+        }
     }
     return outputs;
 }

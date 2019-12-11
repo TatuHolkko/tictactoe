@@ -47,6 +47,8 @@ public:
     const vector<vector<float>>& get_hidden_weights() const;
     const vector<vector<float>>& get_output_weights() const;
 
+    bool REMOVE_OUTPUT_BIAS = true;
+
     /* get a weight with indexes
      *
      * <layer> 0: kernels, 1: hidden layer, 2: output layer
