@@ -1,13 +1,12 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef INODE_H
+#define INODE_H
 
 using namespace std;
 
-class Node
+class INode
 {
 public:
-    Node();
-
+    virtual ~INode();
     //get the current activation value of this node
     virtual float value();
 
@@ -15,4 +14,4 @@ public:
     virtual void update();
 };
 
-#endif // NODE_H
+#endif // INODE_H
