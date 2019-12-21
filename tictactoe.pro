@@ -16,4 +16,5 @@ HEADERS += \
     game/cell.h \
     network/neuralnetwork.h \
     filehandler/filehandler.h \
-    trainer/trainer.h
+    trainer/trainer.h \
+    network/node.h
