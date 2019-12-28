@@ -8,10 +8,10 @@ class INode
 public:
     virtual ~INode();
     //get the current activation value of this node
-    virtual float value();
+    virtual float value() = 0;
 
     //update the activation value
-    virtual void update();
+    virtual void update() = 0;
 };
 
 #endif // INODE_H

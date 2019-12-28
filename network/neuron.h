@@ -11,6 +11,12 @@ class Neuron: public INode
 public:
     Neuron();
 
+    void update();
+
+    float value();
+
+    void connect(INode* to, float weight = 0);
+
 private:
     //connection to previous layer
     struct Connection
@@ -23,7 +29,14 @@ private:
     vector<Connection> connections_;
 
     //bias of the neuron
-    float bias;
+    float bias_;
+
+    //current activation value
+    float value_;
+
+    //return the activation of this neuron for given sum from
+    //connections
+    float activation_function(float sum);
 };
 
 #endif // NEURON_H

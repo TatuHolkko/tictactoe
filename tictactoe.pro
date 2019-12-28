@@ -10,8 +10,9 @@ SOURCES += main.cpp \
     network/neuralnetwork.cpp \
     filehandler/filehandler.cpp \
     trainer/trainer.cpp \
-    network/neuron.cpp \
-    network/node.cpp
+    network/node.cpp \
+    network/neuron.cpp
+
 
 HEADERS += \
     game/game.h \
