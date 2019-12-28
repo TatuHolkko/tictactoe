@@ -12,7 +12,9 @@ SOURCES += main.cpp \
     trainer/trainer.cpp \
     network/node.cpp \
     network/neuron.cpp \
-    network/inputnode.cpp
+    network/inputnode.cpp \
+    network/kernelmaster.cpp \
+    network/kernelinstance.cpp
 
 
 HEADERS += \
@@ -23,4 +25,6 @@ HEADERS += \
     trainer/trainer.h \
     network/node.h \
     network/neuron.h \
-    network/inputnode.h
+    network/inputnode.h \
+    network/kernelmaster.h \
+    network/kernelinstance.h
