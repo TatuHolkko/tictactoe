@@ -40,6 +40,9 @@ public:
      * opponent's units
      */
     vector<vector<int>> get_board(const int friendly_unit) const;
+
+    //get a const pointer to the cell grid
+    const vector<vector<Cell>>* get_board();
     //print the board
     void print() const;
     /* place a unit into the board

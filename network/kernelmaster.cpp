@@ -1,6 +1,6 @@
 #include "kernelmaster.h"
 
-KernelMaster::KernelMaster()
+KernelMaster::KernelMaster(int radius)
 {
 
 }

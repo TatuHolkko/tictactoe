@@ -1,14 +1,14 @@
 #include "inputnode.h"
 
-InputNode::InputNode(int* cell_value_ptr):
-    cell_value_ptr_(cell_value_ptr)
+InputNode::InputNode(Cell* cell_ptr):
+    cell_ptr_(cell_ptr)
 {
 
 }
 
 void InputNode::update()
 {
-    value_ = *cell_value_ptr_;
+    value_ = cell_ptr_->get_value();
 }
 
 float InputNode::value()
