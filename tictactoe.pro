@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     filehandler/filehandler.cpp \
     trainer/trainer.cpp \
     network/node.cpp \
-    network/neuron.cpp
+    network/neuron.cpp \
+    network/inputnode.cpp
 
 
 HEADERS += \
@@ -21,4 +22,5 @@ HEADERS += \
     filehandler/filehandler.h \
     trainer/trainer.h \
     network/node.h \
-    network/neuron.h
+    network/neuron.h \
+    network/inputnode.h
