@@ -15,14 +15,14 @@ public:
 
     float value();
 
-    void connect(INode* to, float weight = 0);
+    void connect(INode* to, float* weight);
 
 private:
     //connection to previous layer
     struct Connection
     {
         INode* node;
-        float weight;
+        float* weight;
     };
 
     //connections to the previous layer
@@ -34,6 +34,7 @@ private:
     //current activation value
     float value_;
 
+protected:
     //return the activation of this neuron for given sum from
     //connections
     float activation_function(float sum);

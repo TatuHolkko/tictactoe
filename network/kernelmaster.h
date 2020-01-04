@@ -17,6 +17,8 @@ class KernelMaster
 public:
     KernelMaster(int radius);
 
+    //return a KernelInstance at <x>, <y> in <board>.
+    //this will link all connections in
     KernelInstance create_instance();
 
 private:

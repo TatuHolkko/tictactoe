@@ -5,8 +5,9 @@
 #ifndef KERNELINSTANCE_H
 #define KERNELINSTANCE_H
 
+#include "neuron.h"
 
-class KernelInstance
+class KernelInstance: public Neuron
 {
 public:
     KernelInstance();
