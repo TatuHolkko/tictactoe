@@ -8,6 +8,7 @@
 #define KERNELMASTER_H
 
 #include "kernelinstance.h"
+#include "../game/cell.h"
 #include <vector>
 
 using namespace std;
@@ -17,11 +18,13 @@ class KernelMaster
 public:
     KernelMaster(int radius);
 
-    //return a KernelInstance at <x>, <y> in <board>.
-    //this will link all connections in
-    KernelInstance create_instance();
+    //return a kernel instance as a Neuron at <x>, <y> in <board> as a
+    //reference parameter. this will link all connections in the kernel
+    //to the correct board cells
+    void connect_kernel(Neuron* neuron, const vector<vector<Cell>>* board, int x, int y) const;
 
 private:
+
     int radius_;
 
     vector<float> weights_;

@@ -25,7 +25,7 @@ public:
     //set value
     void set_value(int value);
 
-    float value() const;
+    float value();
 
     void update();
 

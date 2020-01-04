@@ -15,14 +15,14 @@ public:
 
     float value();
 
-    void connect(INode* to, float* weight);
+    void connect(const INode& to, const float& weight);
 
 private:
     //connection to previous layer
     struct Connection
     {
-        INode* node;
-        float* weight;
+        const INode* node;
+        const float* weight;
     };
 
     //connections to the previous layer

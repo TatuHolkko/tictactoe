@@ -10,9 +10,9 @@ float Neuron::value(){
     return value_;
 }
 
-void Neuron::connect(INode* to, float* weight)
+void Neuron::connect(const INode& to, const float& weight)
 {
-    connections_.push_back({to, weight});
+    connections_.push_back(Connection{&to, &weight});
 }
 
 void Neuron::update()

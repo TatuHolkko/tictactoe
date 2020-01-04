@@ -20,7 +20,7 @@ void Cell::set_value(int value) {
     value_ = value;
 }
 
-float Cell::value() const
+float Cell::value()
 {
     return value_;
 }
