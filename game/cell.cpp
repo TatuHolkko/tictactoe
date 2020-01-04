@@ -19,3 +19,13 @@ int Cell::get_value() const {
 void Cell::set_value(int value) {
     value_ = value;
 }
+
+float Cell::value() const
+{
+    return value_;
+}
+
+void Cell::update()
+{
+
+}

@@ -6,8 +6,9 @@
 #ifndef CELL_H
 #define CELL_H
 
+#include "../network/node.h"
 
-class Cell
+class Cell: public INode
 {
 public:
     Cell();
@@ -23,6 +24,10 @@ public:
     int get_value() const;
     //set value
     void set_value(int value);
+
+    float value() const;
+
+    void update();
 
 private:
     //value representing an empty space with zero and a unit with any other value
