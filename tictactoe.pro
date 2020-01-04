@@ -13,8 +13,7 @@ SOURCES += main.cpp \
     network/node.cpp \
     network/neuron.cpp \
     network/inputnode.cpp \
-    network/kernelmaster.cpp \
-    network/kernelinstance.cpp
+    network/kernelmaster.cpp
 
 
 HEADERS += \
@@ -26,5 +25,4 @@ HEADERS += \
     network/node.h \
     network/neuron.h \
     network/inputnode.h \
-    network/kernelmaster.h \
-    network/kernelinstance.h
+    network/kernelmaster.h
