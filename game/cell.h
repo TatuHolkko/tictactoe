@@ -12,6 +12,7 @@ class Cell: public INode
 {
 public:
     Cell();
+
     //neighbor directions
     enum Direction{
         up, up_right, right, down_right, down, down_left, left, up_left
@@ -25,7 +26,7 @@ public:
     //set value
     void set_value(int value);
 
-    float value();
+    float value() const;
 
     void update();
 

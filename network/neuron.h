@@ -13,7 +13,7 @@ public:
 
     void update();
 
-    float value();
+    float value() const;
 
     void connect(const INode& to, const float& weight);
 

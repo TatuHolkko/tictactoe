@@ -6,7 +6,7 @@ Neuron::Neuron()
 
 }
 
-float Neuron::value(){
+float Neuron::value() const{
     return value_;
 }
 

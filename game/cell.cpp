@@ -2,6 +2,7 @@
 
 Cell::Cell(): value_(0)
 {
+
 }
 
 Cell* Cell::next(Direction dir) {
@@ -20,7 +21,7 @@ void Cell::set_value(int value) {
     value_ = value;
 }
 
-float Cell::value()
+float Cell::value() const
 {
     return value_;
 }
