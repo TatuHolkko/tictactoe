@@ -17,6 +17,10 @@ public:
 
     virtual void connect(const INode& to, const float& weight);
 
+    void enable_bias();
+
+    void disable_bias();
+
 private:
     //connection to previous layer
     struct Connection

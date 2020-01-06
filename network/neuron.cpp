@@ -15,6 +15,16 @@ void Neuron::connect(const INode& to, const float& weight)
     connections_.push_back(Connection{&to, &weight});
 }
 
+void Neuron::enable_bias()
+{
+    bias_enabled_ = true;
+}
+
+void Neuron::disable_bias()
+{
+    bias_enabled_ = false;
+}
+
 void Neuron::update()
 {
     float sum = 0;
@@ -22,8 +32,12 @@ void Neuron::update()
     for (Connection conn : connections_){
         sum += conn.node->value() * *(conn.weight);
     }
-    //add bias and pass the value through activation function
-    value_ = activation_function(sum + bias_);
+    //optionally add bias and pass the value through activation function
+    if (bias_enabled_){
+        value_ = activation_function(sum + bias_);
+    } else {
+        value_ = activation_function(sum);
+    }
 }
 
 float Neuron::activation_function(float sum)
