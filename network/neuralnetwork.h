@@ -21,13 +21,14 @@ public:
                   int number_of_kernels,
                   int hidden_neurons);
 
-    NeuralNetwork(const vector<vector<float>>& kernels,
+    NeuralNetwork(const vector<vector<Cell>>& board,
+                  const vector<vector<float>>& kernels,
                   const vector<vector<float>>& hidden_layer_weights,
                   const vector<vector<float>>& output_weights);
-    //initialize weights and attributes from weight vectors
-    void initialize_from(const vector<vector<float> >& kernels,
-                         const vector<vector<float> >& hidden_layer_weights,
-                         const vector<vector<float> >& output_weights);
+    //initialize weights from weight vectors
+    void set_weights(const vector<vector<float> >& kernels,
+                     const vector<vector<float> >& hidden_layer_weights,
+                     const vector<vector<float> >& output_weights);
     //randomize all weights between -1 and 1
     void randomize();
     /* feed game board state to the network and calculate the output

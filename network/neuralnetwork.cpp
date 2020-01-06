@@ -52,26 +52,25 @@ NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
     }
 }
 
-NeuralNetwork::NeuralNetwork(const vector<vector<float>>& kernels,
+NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
+                             const vector<vector<float>>& kernels,
                              const vector<vector<float>>& hidden_layer_weights,
-                             const vector<vector<float>>& output):
-    NeuralNetwork()
+                             const vector<vector<float>>& output_weights)
 {
-    initialize_from(kernels, hidden_layer_weights, output);
+    int kernel_radius = floor(sqrt(kernels.at(0).size()) / 2);
+    int number_of_kernels = kernels.size();
+    int hidden_neurons = hidden_layer_weights.size();
+
+    NeuralNetwork(board, kernel_radius, number_of_kernels, hidden_neurons);
+
+    set_weights(kernels, hidden_layer_weights, output_weights);
 }
 
-void NeuralNetwork::initialize_from(const vector<vector<float>>& kernels,
+void NeuralNetwork::set_weights(const vector<vector<float>>& kernels,
                                     const vector<vector<float>>& hidden_layer_weights,
                                     const vector<vector<float>>& output_weights)
 {
-    grid_diameter_ = sqrt(output_weights.size());
-    number_of_kernels_ = kernels.size();
-    kernel_radius_ = floor(sqrt(kernels.at(0).size())/2);
-    kernel_side_ = 2*kernel_radius_ + 1;
-    hidden_layer_size_ = hidden_layer_weights.size();
-    kernels_ = kernels;
-    hidden_layer_weights_ = hidden_layer_weights;
-    output_weights_ = output_weights;
+
 }
 
 void NeuralNetwork::randomize(){
