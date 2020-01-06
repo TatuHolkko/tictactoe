@@ -15,7 +15,7 @@ public:
 
     float value() const;
 
-    void connect(const INode& to, const float& weight);
+    virtual void connect(const INode& to, const float& weight);
 
 private:
     //connection to previous layer
