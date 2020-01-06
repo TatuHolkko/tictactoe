@@ -21,7 +21,7 @@ public:
     ~KernelMaster();
 
     //push all kernel instances for this board into <kernels> parameters
-    void create_kernels(vector<Neuron*> kernels, const vector<vector<Cell>>* board);
+    void create_kernels(vector<Neuron*>& kernels, const vector<vector<Cell>>& board);
 
     //return a kernel instance as a Neuron at <x>, <y> in <board>.
     //this will link all connections in the kernelto the correct board cells

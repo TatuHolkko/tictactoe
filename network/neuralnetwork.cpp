@@ -41,12 +41,12 @@ NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
         hidden_layer_.push_back(neuron);
     }
 
-    for (int i = 0; i < pow(grid_diameter,2); i++){
+    for (int i = 0; i < pow(grid_diameter_,2); i++){
         IndependentNeuron output = IndependentNeuron();
         for (vector<IndependentNeuron>::iterator hidden_neuron = hidden_layer_.begin();
              hidden_neuron < hidden_layer_.end();
              hidden_neuron++){
-            output.connect(hidden_neuron, 0);
+            output.connect(*hidden_neuron, 0);
         }
         output_layer_.push_back(output);
     }
