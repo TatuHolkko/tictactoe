@@ -12,6 +12,8 @@ public:
 
     void connect(const INode& to, const float& weight);
 
+    void set_weights(const vector<float>& weights);
+
 private:
 
     vector<float> weights_;

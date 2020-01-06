@@ -26,6 +26,11 @@ void KernelMaster::create_kernels(vector<Neuron*>& kernels, const vector<vector<
     }
 }
 
+void KernelMaster::set_weights(const vector<float> &weights)
+{
+    weights_ = weights;
+}
+
 Neuron& KernelMaster::create_kernel(const vector<vector<Cell>>& board, int x, int y) const
 {
     int board_side = board.size();

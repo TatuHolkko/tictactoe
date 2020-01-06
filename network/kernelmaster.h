@@ -27,6 +27,8 @@ public:
     //this will link all connections in the kernelto the correct board cells
     Neuron& create_kernel(const vector<vector<Cell>>* board, int x, int y) const;
 
+    void set_weights(const vector<float>& weights);
+
 private:
 
     //how many pixels to each direnction does the kernel cover in addition to

@@ -70,7 +70,20 @@ void NeuralNetwork::set_weights(const vector<vector<float>>& kernels,
                                     const vector<vector<float>>& hidden_layer_weights,
                                     const vector<vector<float>>& output_weights)
 {
+    for(unsigned int i = 0; i < kernels_.size(); i++){
+        KernelMaster& master = kernels_.at(i);
+        master.set_weights(kernels.at(i));
+    }
 
+    for(unsigned int i = 0; i < hidden_layer_.size(); i++){
+        IndependentNeuron& hidden_neuron = hidden_layer_.at(i);
+        hidden_neuron.set_weights(hidden_layer_weights.at(i));
+    }
+
+    for(unsigned int i = 0; i < output_layer_.size(); i++){
+        IndependentNeuron& output_neuron = output_layer_.at(i);
+        output_neuron.set_weights(output_weights.at(i));
+    }
 }
 
 void NeuralNetwork::randomize(){
