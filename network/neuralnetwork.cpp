@@ -27,18 +27,19 @@ NeuralNetwork::NeuralNetwork(int grid_diameter,
     kernel_side_(2*kernel_radius + 1),
     hidden_layer_size_(hidden_neurons)
 {
-    //initialize weights to zero
     for (int i = 0; i < number_of_kernels; i++){
-        vector<float> kernel(pow(kernel_side_, 2) + 1, 0);
+        KernelMaster kernel = KernelMaster(kernel_radius);
         kernels_.push_back(kernel);
     }
-    for (int neuron = 0; neuron < hidden_neurons; neuron++){
-        vector<float> convoluted_inputs(pow(grid_diameter - 2*kernel_radius, 2)*number_of_kernels + 1, 0);
-        hidden_layer_weights_.push_back(convoluted_inputs);
+
+    for (int i = 0; i < hidden_neurons; i++){
+        IndependentNeuron neuron = IndependentNeuron();
+        hidden_layer_.push_back(neuron);
     }
-    for (int output = 0; output < pow(grid_diameter,2); output++){
-        vector<float> hidden_layer_output(hidden_neurons + 1, 0);
-        output_weights_.push_back(hidden_layer_output);
+
+    for (int i = 0; i < pow(grid_diameter,2); i++){
+        IndependentNeuron neuron = IndependentNeuron();
+        output_layer_.push_back(neuron);
     }
 }
 
