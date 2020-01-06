@@ -21,7 +21,7 @@ NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
                              int kernel_radius,
                              int number_of_kernels,
                              int hidden_neurons):
-    grid_diameter_(grid_diameter),
+    grid_diameter_(board.size()),
     number_of_kernels_(number_of_kernels),
     kernel_radius_(kernel_radius),
     kernel_side_(2*kernel_radius + 1),
@@ -42,13 +42,13 @@ NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
     }
 
     for (int i = 0; i < pow(grid_diameter,2); i++){
-        IndependentNeuron neuron = IndependentNeuron();
+        IndependentNeuron output = IndependentNeuron();
         for (vector<IndependentNeuron>::iterator hidden_neuron = hidden_layer_.begin();
              hidden_neuron < hidden_layer_.end();
              hidden_neuron++){
-            neuron.connect(hidden_neuron, 0);
+            output.connect(hidden_neuron, 0);
         }
-        output_layer_.push_back(neuron);
+        output_layer_.push_back(output);
     }
 }
 
