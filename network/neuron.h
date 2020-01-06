@@ -17,6 +17,10 @@ public:
 
     virtual void connect(const INode& to, const float& weight);
 
+    void enable_bias();
+
+    void disable_bias();
+
 private:
     //connection to previous layer
     struct Connection
@@ -30,6 +34,9 @@ private:
 
     //bias of the neuron
     float bias_;
+
+    //if this is false, bias does not affect the activation
+    bool bias_enabled_;
 
     //current activation value
     float value_;
