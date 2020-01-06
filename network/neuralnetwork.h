@@ -1,5 +1,10 @@
 #ifndef NEURALNETWORK_H
 #define NEURALNETWORK_H
+
+#include "kernelmaster.h"
+#include "neuron.h"
+#include "independentneuron.h"
+
 #include <vector>
 #include <string>
 #include <random>
@@ -75,12 +80,17 @@ private:
     int kernel_side_ = 0;
     //number of neurons in the hidden layer
     int hidden_layer_size_ = 0;
-    //kernel weights for convolution
-    vector<vector<float>> kernels_ = {};
-    //hidden layer weights
-    vector<vector<float>> hidden_layer_weights_ = {};
-    //output weights
-    vector<vector<float>> output_weights_ = {};
+    //kernelmaster for each unique kernel
+    vector<KernelMaster> kernels_ = {};
+
+    //vector of all kernel instances for each postion and orientation
+    //of a kernel master
+    vector<Neuron*> kernel_instances_ = {};
+
+    //hidden layer
+    vector<IndependentNeuron> hidden_layer_ = {};
+    //output layer
+    vector<IndependentNeuron> output_layer_ = {};
     //normal distribution used by the random_normal function
     normal_distribution<double> norm_dist_ = normal_distribution<double>(0.0,1.0);
     default_random_engine rand_eng_;

@@ -10,8 +10,8 @@ NeuralNetwork::NeuralNetwork():
     kernel_side_(0),
     hidden_layer_size_(0),
     kernels_({}),
-    hidden_layer_weights_({}),
-    output_weights_({})
+    hidden_layer_({}),
+    output_layer_({})
 {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     rand_eng_ = default_random_engine(seed);
