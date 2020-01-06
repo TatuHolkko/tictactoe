@@ -17,10 +17,10 @@ NeuralNetwork::NeuralNetwork():
     rand_eng_ = default_random_engine(seed);
 }
 
-NeuralNetwork::NeuralNetwork(int grid_diameter,
+NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
                              int kernel_radius,
-                             int hidden_neurons,
-                             int number_of_kernels):
+                             int number_of_kernels,
+                             int hidden_neurons):
     grid_diameter_(grid_diameter),
     number_of_kernels_(number_of_kernels),
     kernel_radius_(kernel_radius),
@@ -28,17 +28,26 @@ NeuralNetwork::NeuralNetwork(int grid_diameter,
     hidden_layer_size_(hidden_neurons)
 {
     for (int i = 0; i < number_of_kernels; i++){
-        KernelMaster kernel = KernelMaster(kernel_radius);
-        kernels_.push_back(kernel);
+        KernelMaster master = KernelMaster(kernel_radius);
+        master.create_kernels(kernel_instances_, board);
+        kernels_.push_back(master);
     }
 
     for (int i = 0; i < hidden_neurons; i++){
         IndependentNeuron neuron = IndependentNeuron();
+        for (Neuron* kernel : kernel_instances_){
+            neuron.connect(*kernel, 0);
+        }
         hidden_layer_.push_back(neuron);
     }
 
     for (int i = 0; i < pow(grid_diameter,2); i++){
         IndependentNeuron neuron = IndependentNeuron();
+        for (vector<IndependentNeuron>::iterator hidden_neuron = hidden_layer_.begin();
+             hidden_neuron < hidden_layer_.end();
+             hidden_neuron++){
+            neuron.connect(hidden_neuron, 0);
+        }
         output_layer_.push_back(neuron);
     }
 }

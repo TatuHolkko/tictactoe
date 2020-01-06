@@ -16,10 +16,10 @@ class NeuralNetwork
 public:
     NeuralNetwork();
 
-    NeuralNetwork(int grid_diameter,
+    NeuralNetwork(const vector<vector<Cell>>& board,
                   int kernel_radius,
-                  int hidden_neurons,
-                  int number_of_kernels);
+                  int number_of_kernels,
+                  int hidden_neurons);
 
     NeuralNetwork(const vector<vector<float>>& kernels,
                   const vector<vector<float>>& hidden_layer_weights,
