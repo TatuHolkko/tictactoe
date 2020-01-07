@@ -1,3 +1,6 @@
+/* this is a module for objects that hold an array of floats (weights)
+ * that can be mutated and randomized
+ */
 #ifndef WEIGHTED_H
 #define WEIGHTED_H
 
@@ -29,7 +32,7 @@ private:
     float random_normal();
 
     //return a uniformally random number between -1 and 1
-    static float random_number();
+    static float random_uniform();
 };
 
 #endif // WEIGHTED_H
