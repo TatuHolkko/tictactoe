@@ -49,9 +49,9 @@ public:
     int get_kernel_radius() const;
     int get_kernel_side() const;
     int get_hidden_layer_size() const;
-    const vector<vector<float>>& get_kernel_weights() const;
-    const vector<vector<float>>& get_hidden_weights() const;
-    const vector<vector<float>>& get_output_weights() const;
+    const vector<KernelMaster>& get_kernels() const;
+    const vector<IndependentNeuron>& get_hidden_layer() const;
+    const vector<IndependentNeuron>& get_output_layer() const;
 
     bool REMOVE_OUTPUT_BIAS = true;
 

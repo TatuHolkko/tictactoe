@@ -210,19 +210,19 @@ int NeuralNetwork::get_hidden_layer_size() const
     return hidden_layer_size_;
 }
 
-const vector<vector<float>>& NeuralNetwork::get_kernel_weights() const
+const vector<KernelMaster>& NeuralNetwork::get_kernels() const
 {
     return kernels_;
 }
 
-const vector<vector<float>>& NeuralNetwork::get_hidden_weights() const
+const vector<IndependentNeuron>& NeuralNetwork::get_hidden_layer() const
 {
-    return hidden_layer_weights_;
+    return hidden_layer_;
 }
 
-const vector<vector<float>>& NeuralNetwork::get_output_weights() const
+const vector<IndependentNeuron>& NeuralNetwork::get_output_layer() const
 {
-    return output_weights_;
+    return output_layer_;
 }
 
 float NeuralNetwork::weight_at(int layer, int node, int weight) const
