@@ -9,11 +9,12 @@
 
 #include "../game/cell.h"
 #include "neuron.h"
+#include "weighted.h"
 #include <vector>
 
 using namespace std;
 
-class KernelMaster
+class KernelMaster: public Weighted
 {
 public:
     KernelMaster(int radius);
@@ -34,8 +35,6 @@ private:
     //how many pixels to each direnction does the kernel cover in addition to
     //the center
     int radius_;
-
-    vector<float> weights_;
 
     //pointers to all instances of this kernel
     vector<Neuron*> instances_;

@@ -6,7 +6,7 @@ KernelMaster::KernelMaster(int radius):
     radius_(radius)
 {
     int side = 2 * radius + 1;
-    weights_ = vector<float>(pow(side, 2), 0);
+    Weighted(pow(side, 2));
 }
 
 KernelMaster::~KernelMaster()
