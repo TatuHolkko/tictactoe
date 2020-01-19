@@ -162,26 +162,26 @@ void NeuralNetwork::mutate(float scale)
 
 void NeuralNetwork::make_equal_to(const NeuralNetwork &other)
 {
-    vector<vector<float>>::iterator own_weight = kernels_.begin();
-    vector<vector<float>>::const_iterator other_weight = other.get_kernel_weights().begin();
-    while(own_weight != kernels_.end()){
-        *own_weight = *other_weight;
-        own_weight++;
-        other_weight++;
+    vector<KernelMaster>::iterator own_kernel = kernels_.begin();
+    vector<KernelMaster>::const_iterator other_kernel = other.get_kernels().begin();
+    while(own_kernel != kernels_.end()){
+        *own_kernel = *other_kernel;
+        own_kernel++;
+        other_kernel++;
     }
-    own_weight = hidden_layer_weights_.begin();
-    other_weight = other.get_hidden_weights().begin();
-    while(own_weight != hidden_layer_weights_.end()){
-        *own_weight = *other_weight;
-        own_weight++;
-        other_weight++;
+    vector<IndependentNeuron>::iterator own_neuron = hidden_layer_.begin();
+    vector<IndependentNeuron>::const_iterator other_neuron = other.get_hidden_layer().begin();
+    while(own_neuron != hidden_layer_.end()){
+        *own_neuron = *other_neuron;
+        own_neuron++;
+        other_neuron++;
     }
-    own_weight = output_weights_.begin();
-    other_weight = other.get_output_weights().begin();
-    while(own_weight != output_weights_.end()){
-        *own_weight = *other_weight;
-        own_weight++;
-        other_weight++;
+    own_neuron = output_layer_.begin();
+    other_neuron = other.get_output_layer().begin();
+    while(own_neuron != output_layer_.end()){
+        *own_neuron = *other_neuron;
+        own_neuron++;
+        other_neuron++;
     }
 }
 
