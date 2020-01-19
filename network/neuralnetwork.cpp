@@ -87,22 +87,15 @@ void NeuralNetwork::set_weights(const vector<vector<float>>& kernels,
 }
 
 void NeuralNetwork::randomize(){
-    vector<vector<float>>::iterator it1;
-    vector<float>::iterator it2;
-    for (it1 = kernels_.begin(); it1 < kernels_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_number();
-        }
+
+    for(KernelMaster& kernel : kernels_){
+        kernel.randomize(1);
     }
-    for (it1 = hidden_layer_weights_.begin(); it1 < hidden_layer_weights_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_number();
-        }
+    for(IndependentNeuron& neuron : hidden_layer_){
+        neuron.randomize(1);
     }
-    for (it1 = output_weights_.begin(); it1 < output_weights_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_number();
-        }
+    for(IndependentNeuron& output : output_layer_){
+        output.randomize(1);
     }
 }
 
