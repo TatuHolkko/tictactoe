@@ -27,6 +27,12 @@ public:
     //elements as weights of this Weighted object.
     void set_weights(const vector<float>& weights);
 
+    //copy all weight values from <target> to this object
+    void set_equal(const Weighted& target);
+
+    //get weights
+    const vector<float>& get_weights() const;
+
 protected:
     vector<float> weights_;
 

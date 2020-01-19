@@ -40,6 +40,19 @@ void Weighted::set_weights(const vector<float>& weights)
     }
 }
 
+const vector<float>& get_weights() const {
+    return weights_;
+}
+
+void Weighted::set_equal(const Weighted& target)
+{
+    vector<float>& target_weights = target.get_weights();
+    if (target_weights.size() != weights_.size()){
+        throw "Can not copy weights, because target object has different number of weights";
+    }
+    set_weights(target_weights);
+}
+
 float Weighted::random_normal()
 {
     return (float)norm_dist_(rand_eng_);
