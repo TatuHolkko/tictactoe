@@ -20,6 +20,13 @@ public:
     //use a normal distribution with stddev of <scale> to mutate all weights
     void mutate(const float& scale);
 
+    //add a weight with value: <value> and return a reference to the saved float
+    const float& add_weight(const float& value);
+
+    //set all weights to equal <weights>. <weights> must be a vector that has at least as many
+    //elements as weights of this Weighted object.
+    void set_weights(const vector<float>& weights);
+
 protected:
     vector<float> weights_;
 
