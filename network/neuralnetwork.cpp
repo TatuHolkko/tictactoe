@@ -99,52 +99,20 @@ void NeuralNetwork::randomize(){
     }
 }
 
-vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid) const
+void NeuralNetwork::make_move(vector<float>& output)
 {
-    vector<float> convoluted_inputs;
-    convoluted_inputs.reserve(number_of_kernels_ * pow(grid_diameter_ - 2*kernel_radius_, 2));
-
-    for (int kernel_index = 0; kernel_index < number_of_kernels_; kernel_index++){
-        for (int x = kernel_radius_; x < grid_diameter_ - kernel_radius_; x++){
-            for (int y = kernel_radius_; y < grid_diameter_ - kernel_radius_; y++){
-                float kernel_sum = apply_kernel(game_grid,
-                                                kernels_.at(kernel_index),
-                                                kernel_radius_,
-                                                x,
-                                                y);
-                float bias = kernels_.at(kernel_index).back();
-                convoluted_inputs.push_back(activation_function(kernel_sum + bias));
-            }
-        }
+    for(Neuron* kernel_instance : kernel_instances_){
+        kernel_instance->update();
     }
 
-    vector<float> hidden_activations;
-    hidden_activations.reserve(hidden_layer_size_);
-    for (int neuron = 0; neuron < hidden_layer_size_; neuron++){
-        int sum = 0;
-        for (vector<float>::size_type input = 0; input < convoluted_inputs.size(); input++){
-            sum += convoluted_inputs.at(input) * hidden_layer_weights_.at(neuron).at(input);
-        }
-        float bias = hidden_layer_weights_.at(neuron).back();
-        hidden_activations.push_back(activation_function(sum + bias));
+    for(Neuron& hidden_node : hidden_layer_){
+        hidden_node.update();
     }
 
-    vector<float> outputs;
-    int amount_of_cells = pow(grid_diameter_, 2);
-    outputs.reserve(amount_of_cells);
-    for (int output = 0; output < amount_of_cells; output++){
-        int sum = 0;
-        for (int hidd_neur = 0; hidd_neur < hidden_layer_size_; hidd_neur++){
-            sum += hidden_activations.at(hidd_neur) * output_weights_.at(output).at(hidd_neur);
-        }
-        if (REMOVE_OUTPUT_BIAS){
-            outputs.push_back(activation_function(sum));
-        } else {
-            float bias = output_weights_.at(output).back();
-            outputs.push_back(activation_function(sum + bias));
-        }
+    for(Neuron& output_node : output_layer_){
+        output_node.update();
+        output.push_back(output_node.value());
     }
-    return outputs;
 }
 
 void NeuralNetwork::mutate(float scale)

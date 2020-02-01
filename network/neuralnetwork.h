@@ -31,14 +31,17 @@ public:
                      const vector<vector<float> >& output_weights);
     //randomize all weights between -1 and 1
     void randomize();
-    /* feed game board state to the network and calculate the output
-     * probability distribution where this network would place it's
-     * next unit
+    /* calculate the output probability distribution where this network would place it's
+     * next unit according to the current board state. the board needs to be from this
+     * networks point of view (meaning that this network's units must be represented with
+     * ones).
      *
-     * returns: a flattened distribution vector. if the board is n x m
+     * <output> an empty vector of floats where the result distribution will be stored
+     *
+     * returns: a flattened distribution vector as a reference parameter. if the board is n x m
      * matrix, the distribution vector will be a vector of length n*m
      */
-    vector<float> make_move(const vector<vector<int>>& game_grid) const;
+    void make_move(vector<float>& output);
     //nudge all weights randomly
     void mutate(float scale);
     //copy all weights from <other>
