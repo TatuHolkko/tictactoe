@@ -73,6 +73,12 @@ public:
      */
     void set_weight_at(int layer, int node, int weight, float value);
 
+    /* Set this network's weights to equal the averages of the weights in <pool>
+     *
+     * <pool> list of NeuralNetworks that are averaged
+     */
+    void make_average_from(const vector<NeuralNetwork&>& pool);
+
 private:
     //game grid side length
     int grid_diameter_ = 0;

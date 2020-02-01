@@ -215,6 +215,77 @@ void NeuralNetwork::set_weight_at(int layer, int node, int weight, float value)
     }
 }
 
+void NeuralNetwork::make_average_from(const vector<NeuralNetwork&>& pool)
+{
+    int output_layer_size = pow(grid_diameter_, 2);
+
+    //first index of these 2d vectors defines the neuron index in the layer,
+    //and second index defines the neural net of whom the actual neuron is
+    vector<vector<const Weighted&>> kernel_pool = vector(number_of_kernels_, {});
+    vector<vector<const Weighted&>> hidden_neuron_pool = vector(hidden_layer_size_, {});
+    vector<vector<const Weighted&>> output_neuron_pool = vector(output_layer_size, {});
+
+
+    int index = 0;
+    for (NeuralNetwork& network : pool){
+        for (const KernelMaster& kernel : network.get_kernels()){
+            kernel_pool.at(index).push_back(kernel);
+            index++;
+        }
+
+        index = 0;
+        for(const IndependentNeuron& hidden_neuron : network.get_hidden_layer()){
+            hidden_neuron_pool.at(index).push_back(hidden_neuron);
+            index++;
+        }
+
+        index = 0;
+        for(const IndependentNeuron& output_neuron : network.get_output_layer()){
+            output_neuron_pool.at(index).push_back(output_neuron);
+            index++;
+        }
+    }
+
+    index = 0;
+    for (Weighted& kernel : kernels_){
+
+        //averaged weights will be saved in this
+        vector<float> average_weights = {};
+
+        Weighted::average(kernel_pool.at(index), average_weights);
+
+        kernel.set_weights(average_weights);
+
+        index++;
+    }
+
+    index = 0;
+    for (Weighted& hidden_neuron : hidden_layer_){
+
+        //averaged weights will be saved in this
+        vector<float> average_weights = {};
+
+        Weighted::average(hidden_neuron_pool.at(index), average_weights);
+
+        hidden_neuron.set_weights(average_weights);
+
+        index++;
+    }
+
+    index = 0;
+    for(Weighted& output_neuron : output_layer_){
+
+        //averaged weights will be saved in this
+        vector<float> average_weights = {};
+
+        Weighted::average(output_neuron_pool.at(index), average_weights);
+
+        output_neuron.set_weights(average_weights);
+
+        index++;
+    }
+}
+
 float NeuralNetwork::activation_function(float x)
 {
     if (x > 0){

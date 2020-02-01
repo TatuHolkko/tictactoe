@@ -53,7 +53,7 @@ void Weighted::set_equal(const Weighted& target)
     set_weights(target_weights);
 }
 
-void Weighted::get_average(const vector<Weighted>& objects, vector<float>& result)
+static void Weighted::average(const vector<Weighted>& objects, vector<float>& result)
 {
     float sum = 0;
     int number_of_weights = objects.begin().size();

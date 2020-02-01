@@ -243,66 +243,17 @@ void Trainer::pick_winner()
     vector<Competitor>::iterator winners_begin = network_pool_.begin();
     vector<Competitor>::iterator winners_end = winners_begin + winner_pool_size_;
 
-    //for each kernel
-    int kernel_size = pow(winner_.get_kernel_side(), 2);
-    for (int kernel_number = 0;
-         kernel_number < winner_.get_number_of_kernels();
-         kernel_number++){
-        //for each tile in the kernel
-        for(int kernel_i = 0; kernel_i < kernel_size; kernel_i++){
-            float sum = 0;
-            //sum the kernel tile weight from all winners
-            for (vector<Competitor>::iterator comp_it = winners_begin;
-                 comp_it < winners_end;
-                 comp_it++){
-                sum += comp_it->network.weight_at(0, kernel_number, kernel_i);
-            }
-            float avg = sum/winner_pool_size_;
+    vector<const NeuralNetwork&> winners= {};
 
-            winner_.set_weight_at(0, kernel_number, kernel_i, avg);
+    for(int kernel_index = 0; kernel_index < number_of_kernels; kernel_index++){
+        for (vector<Competitor>::iterator competitor_iterator = winners_begin;
+             competitor_iterator < winners_end;
+             competitor_iterator++){
+            winners.push_back(competitor_iterator->network);
         }
     }
 
-    //for each hidden neuron
-    int number_of_weights = winner_.get_hidden_weights().begin()->size();
-    for (int node = 0;
-         node < winner_.get_hidden_layer_size();
-         node++){
-        //for each weight in the neuron node
-        for(int weight_i = 0; weight_i < number_of_weights; weight_i++){
-            float sum = 0;
-            //sum the weight from all winners
-            for (vector<Competitor>::iterator comp_it = winners_begin;
-                 comp_it < winners_end;
-                 comp_it++){
-                sum += comp_it->network.weight_at(1, node, weight_i);
-            }
-            float avg = sum/winner_pool_size_;
-
-            winner_.set_weight_at(1, node, weight_i, avg);
-        }
-    }
-
-    //for each output neuron
-    number_of_weights = winner_.get_hidden_layer_size();
-    int output_size = winner_.get_output_weights().size();
-    for (int output_node = 0;
-         output_node < output_size;
-         output_node++){
-        //for each weight in the output node
-        for(int weight_i = 0; weight_i < number_of_weights; weight_i++){
-            float sum = 0;
-            //sum the weight from all winners
-            for (vector<Competitor>::iterator comp_it = winners_begin;
-                 comp_it < winners_end;
-                 comp_it++){
-                sum += comp_it->network.weight_at(2, output_node, weight_i);
-            }
-            float avg = sum/winner_pool_size_;
-
-            winner_.set_weight_at(2, output_node, weight_i, avg);
-        }
-    }
+    winner_.make_average_from(winners);
 }
 
 pair<int, int> Trainer::get_move_cli()
