@@ -110,8 +110,8 @@ private:
     //score all competitors against all others
     void score_all();
     //play a single game
-    void play_match(const NeuralNetwork& player1,
-                    const NeuralNetwork& player2,
+    void play_match(NeuralNetwork& player1,
+                    NeuralNetwork& player2,
                     bool print = false);
     /* change the scores of the last players according to the
      * state that the game was left after the last game finished

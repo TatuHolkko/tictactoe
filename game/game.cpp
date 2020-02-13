@@ -75,7 +75,11 @@ void Game::turn(Game::Player player)
 
 void Game::next_turn()
 {
-    turn((in_turn_ + 1) % 2);
+    if (in_turn_ == player1){
+        turn(player2);
+    } else {
+        turn(player1);
+    }
 }
 
 Game::State Game::update_state(const int placed_unit, const int x, const int y){
