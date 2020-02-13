@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "filehandler.h"
+#include "../network/weighted.h"
 
 using namespace std;
 
@@ -24,27 +25,26 @@ bool filehandler::save(const NeuralNetwork &nn, const string& path)
         cout << "failed to back up" << endl;
         return false;
     }
-    const vector<vector<float>>* vect = &nn.get_kernel_weights();
 
-    for (vector<float> kernel : *vect){
+    for (const Weighted& kernel : nn.get_kernels()){
         output << LABEL_KERNEL;
-        for (float value : kernel){
+        for (float value : kernel.get_weights()){
             output << ";" << value;
         }
         output << endl;
     }
-    vect = &nn.get_hidden_weights();
-    for (vector<float> hidden_neuron : *vect){
+
+    for (const Weighted& hidden_neuron : nn.get_hidden_layer()){
         output << LABEL_NEURON;
-        for (float value : hidden_neuron){
+        for (float value : hidden_neuron.get_weights()){
             output << ";" << value;
         }
         output << endl;
     }
-    vect = &nn.get_output_weights();
-    for (vector<float> output_neuron : *vect){
+
+    for (const Weighted& output_neuron : nn.get_output_layer()){
         output << LABEL_OUTPUT;
-        for (float value : output_neuron){
+        for (float value : output_neuron.get_weights()){
             output << ";" << value;
         }
         output << endl;
@@ -54,7 +54,7 @@ bool filehandler::save(const NeuralNetwork &nn, const string& path)
     return true;
 }
 
-bool filehandler::load(NeuralNetwork& nn, const string& path)
+bool filehandler::load(NeuralNetwork& nn, const string& path, const vector<vector<Cell>>& board)
 {
     cout << "reading .nn file: " << path << endl;
     ifstream input(path);
@@ -95,7 +95,7 @@ bool filehandler::load(NeuralNetwork& nn, const string& path)
         }
     }
     input.close();
-    nn.initialize_from(kernels, hidden_layer_weights, output_weights);
+    nn = NeuralNetwork(board, kernels, hidden_layer_weights, output_weights);
     cout << "file reading done" << endl;
     return true;
 }
