@@ -33,8 +33,8 @@ public:
     //get weights
     const vector<float>& get_weights() const;
 
-    //get average weights of a list of Weighted objects as a reference parameter
-    void average(const vector<Weighted>& objects, vector<float>& result);
+    //set this object's weights equal to the average of the parameter objects' weights
+    void make_average_from(const vector<const Weighted*>& objects);
 
     //return the weight at the given index
     const float& weight_at(int i);

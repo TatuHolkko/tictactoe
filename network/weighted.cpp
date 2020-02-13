@@ -53,8 +53,9 @@ void Weighted::set_equal(const Weighted& target)
     set_weights(target_weights);
 }
 
-static void Weighted::average(const vector<Weighted>& objects, vector<float>& result)
+void Weighted::make_average_from(const vector<const Weighted*>& objects)
 {
+    vector<float> average_weights = {};
     float sum = 0;
     int number_of_weights = objects.begin().size();
     //for each weight
@@ -62,10 +63,12 @@ static void Weighted::average(const vector<Weighted>& objects, vector<float>& re
         sum = 0;
         //average the same weight from all objects
         for(const Weighted& object : objects){
-            sum += object.weight_at(i);
+            sum += object.weight_at(weight_index);
         }
-        result.push_back(sum / number_of_objects);
+        average_weights.push_back(sum / objects.size());
     }
+
+    set_weights(average_weights);
 }
 
 const float& Weighted::weight_at(int i)

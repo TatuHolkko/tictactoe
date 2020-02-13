@@ -193,96 +193,57 @@ const vector<IndependentNeuron>& NeuralNetwork::get_output_layer() const
     return output_layer_;
 }
 
-float NeuralNetwork::weight_at(int layer, int node, int weight) const
-{
-    if (layer == 0){
-        return kernels_.at(node).at(weight);
-    } else if (layer == 1) {
-        return hidden_layer_weights_.at(node).at(weight);
-    } else {
-        return output_weights_.at(node).at(weight);
-    }
-}
-
-void NeuralNetwork::set_weight_at(int layer, int node, int weight, float value)
-{
-    if (layer == 0){
-        kernels_.at(node).at(weight) = value;
-    } else if (layer == 1) {
-        hidden_layer_weights_.at(node).at(weight) = value;
-    } else {
-        output_weights_.at(node).at(weight) = value;
-    }
-}
-
-void NeuralNetwork::make_average_from(const vector<NeuralNetwork&>& pool)
+void NeuralNetwork::make_average_from(const vector<NeuralNetwork*>& pool)
 {
     int output_layer_size = pow(grid_diameter_, 2);
 
-    //first index of these 2d vectors defines the neuron index in the layer,
-    //and second index defines the neural net of whom the actual neuron is
-    vector<vector<const Weighted&>> kernel_pool = vector(number_of_kernels_, {});
-    vector<vector<const Weighted&>> hidden_neuron_pool = vector(hidden_layer_size_, {});
-    vector<vector<const Weighted&>> output_neuron_pool = vector(output_layer_size, {});
+    /* first index of these 2d vectors defines the neuron index in the layer,
+     * and second index defines the neural net of whom the actual neuron is
+     */
+    vector<vector<const Weighted*>> kernel_pool(number_of_kernels_, vector<const Weighted*>());
+    vector<vector<const Weighted*>> hidden_neuron_pool(hidden_layer_size_, vector<const Weighted*>());
+    vector<vector<const Weighted*>> output_neuron_pool(output_layer_size, vector<const Weighted*>());
 
+    //this index tells which neuron/kernel in the current network is to be added
+    int node_index = 0;
 
-    int index = 0;
-    for (NeuralNetwork& network : pool){
-        for (const KernelMaster& kernel : network.get_kernels()){
-            kernel_pool.at(index).push_back(kernel);
-            index++;
+    //collect all weighted objects (neurons) from all networks so that you can list
+    //the same neuron of all the networks
+    for (const NeuralNetwork* network : pool){
+        for (const Weighted& kernel : network->get_kernels()){
+            kernel_pool.at(node_index).push_back(&kernel);
+            node_index++;
         }
 
-        index = 0;
-        for(const IndependentNeuron& hidden_neuron : network.get_hidden_layer()){
-            hidden_neuron_pool.at(index).push_back(hidden_neuron);
-            index++;
+        node_index = 0;
+        for(const Weighted& hidden_neuron : network->get_hidden_layer()){
+            hidden_neuron_pool.at(node_index).push_back(&hidden_neuron);
+            node_index++;
         }
 
-        index = 0;
-        for(const IndependentNeuron& output_neuron : network.get_output_layer()){
-            output_neuron_pool.at(index).push_back(output_neuron);
-            index++;
+        node_index = 0;
+        for(const Weighted& output_neuron : network->get_output_layer()){
+            output_neuron_pool.at(node_index).push_back(&output_neuron);
+            node_index++;
         }
     }
 
-    index = 0;
+    node_index = 0;
     for (Weighted& kernel : kernels_){
-
-        //averaged weights will be saved in this
-        vector<float> average_weights = {};
-
-        Weighted::average(kernel_pool.at(index), average_weights);
-
-        kernel.set_weights(average_weights);
-
-        index++;
+        kernel.make_average_from(kernel_pool.at(node_index));
+        node_index++;
     }
 
-    index = 0;
+    node_index = 0;
     for (Weighted& hidden_neuron : hidden_layer_){
-
-        //averaged weights will be saved in this
-        vector<float> average_weights = {};
-
-        Weighted::average(hidden_neuron_pool.at(index), average_weights);
-
-        hidden_neuron.set_weights(average_weights);
-
-        index++;
+        hidden_neuron.make_average_from(hidden_neuron_pool.at(node_index));
+        node_index++;
     }
 
-    index = 0;
+    node_index = 0;
     for(Weighted& output_neuron : output_layer_){
-
-        //averaged weights will be saved in this
-        vector<float> average_weights = {};
-
-        Weighted::average(output_neuron_pool.at(index), average_weights);
-
-        output_neuron.set_weights(average_weights);
-
-        index++;
+        output_neuron.make_average_from(output_neuron_pool.at(node_index));
+        node_index++;
     }
 }
 

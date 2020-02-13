@@ -77,7 +77,7 @@ public:
      *
      * <pool> list of NeuralNetworks that are averaged
      */
-    void make_average_from(const vector<NeuralNetwork&>& pool);
+    void make_average_from(const vector<NeuralNetwork*>& pool);
 
 private:
     //game grid side length
