@@ -49,6 +49,35 @@ void Game::reset()
     length_ = 0;
 }
 
+void Game::turn(Game::Player player)
+{
+    if (player == in_turn_){
+        //the board is from the right player's perspective
+        return;
+    }
+    in_turn_ = player;
+
+    int friendly_unit = player + 1;
+
+    for (vector<vector<Cell>>::iterator row = board_.begin(); row < board_.end(); row++){
+        for (vector<Cell>::iterator cell_it =  row->begin(); cell_it < row->end(); cell_it++){
+            int value = cell_it->get_value();
+            if (value != 0){
+                if (value == friendly_unit){
+                    cell_it->set_value(1);
+                } else {
+                    cell_it->set_value(2);
+                }
+            }
+        }
+    }
+}
+
+void Game::next_turn()
+{
+    turn((in_turn_ + 1) % 2);
+}
+
 Game::State Game::update_state(const int placed_unit, const int x, const int y){
     Cell* placed_cell = get_cell(x, y);
     //check chain lenghts in all directions

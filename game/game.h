@@ -20,6 +20,11 @@ public:
         player2_win
     };
 
+    enum Player{
+        player1,
+        player2
+    };
+
     Game(int size, int win);
     //return game state
     State get_state() const;
@@ -31,6 +36,17 @@ public:
     int get_length() const;
     //reset game state and clear board
     void reset();
+
+    /* this will interchange ones and twos in the board so that
+     * the board looks correct for the next player
+     * should be called every time the player changes.
+     */
+    void turn(Player player);
+
+    //switch the viewing player and update board to show their
+    //friendly and opposing units
+    void next_turn();
+
     //return a pointer to cell at (x, y)
     Cell* get_cell(int x, int y);
     /* return grid from perspective of a player
@@ -66,6 +82,8 @@ private:
     int win_ = 0;
     //length of the game in turns
     int length_ = 0;
+    //player currently viewing the board
+    Player in_turn_ = player1;
     //game state that is updated every time a unit is placed
     State state_ = ongoing;
     /* game result that is updated once the game reaches
