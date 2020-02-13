@@ -16,6 +16,8 @@ class NeuralNetwork
 public:
     NeuralNetwork();
 
+    NeuralNetwork(const NeuralNetwork& other, const vector<vector<Cell>>& board);
+
     NeuralNetwork(const vector<vector<Cell>>& board,
                   int kernel_radius,
                   int number_of_kernels,

@@ -25,20 +25,14 @@ Trainer::Trainer(NeuralNetwork &ancestor,
     network_pool_.reserve(pool_size);
 
     for (int i = 0; i < pool_size; i++){
-        Competitor comp ={NeuralNetwork(
-                          ancestor.get_kernel_weights(),
-                          ancestor.get_hidden_weights(),
-                          ancestor.get_output_weights()),
-                          0};
+        Competitor comp ={NeuralNetwork(ancestor), 0};
         if (randomize){
             comp.network.randomize();
         }
         network_pool_.push_back(comp);
     }
-    winner_ = NeuralNetwork();
-    winner_.initialize_from(network_pool_.begin()->network.get_kernel_weights(),
-                            network_pool_.begin()->network.get_hidden_weights(),
-                            network_pool_.begin()->network.get_output_weights());
+    winner_ = NeuralNetwork(ancestor);
+
     if (randomize){
         score_all();
         pick_winner();
