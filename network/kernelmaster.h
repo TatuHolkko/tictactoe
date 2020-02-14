@@ -26,7 +26,7 @@ public:
 
     //return a kernel instance as a Neuron at <x>, <y> in <board>.
     //this will link all connections in the kernelto the correct board cells
-    Neuron& create_kernel(const vector<vector<Cell>>* board, int x, int y) const;
+    Neuron& create_kernel(const vector<vector<Cell>>& board, int x, int y);
 
     void set_weights(const vector<float>& weights);
 

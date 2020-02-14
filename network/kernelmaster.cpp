@@ -19,9 +19,9 @@ KernelMaster::~KernelMaster()
 void KernelMaster::create_kernels(vector<Neuron*>& kernels, const vector<vector<Cell>>& board)
 {
     int side = board.size();
-    for (y = radius_; y < side - radius_; y++){
-        for (x = radius_; x < side - radius_; x++){
-            kernels.push_back(create_kernel(board, x, y));
+    for (int y = radius_; y < side - radius_; y++){
+        for (int x = radius_; x < side - radius_; x++){
+            kernels.push_back(&(create_kernel(board, x, y)));
         }
     }
 }
@@ -31,7 +31,7 @@ void KernelMaster::set_weights(const vector<float> &weights)
     weights_ = weights;
 }
 
-Neuron& KernelMaster::create_kernel(const vector<vector<Cell>>& board, int x, int y) const
+Neuron& KernelMaster::create_kernel(const vector<vector<Cell>>& board, int x, int y)
 {
     int board_side = board.size();
     if (x - radius_ < 0 || x + radius_ >= board_side || y - radius_ < 0 || y + radius_ >= board_side){
@@ -47,6 +47,6 @@ Neuron& KernelMaster::create_kernel(const vector<vector<Cell>>& board, int x, in
             weight_index++;
         }
     }
-    instances_.push_back(&neuron);
+    instances_.push_back(neuron);
     return *neuron;
 }
