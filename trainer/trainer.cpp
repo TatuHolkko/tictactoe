@@ -242,14 +242,11 @@ void Trainer::pick_winner()
     vector<Competitor>::iterator winners_begin = network_pool_.begin();
     vector<Competitor>::iterator winners_end = winners_begin + winner_pool_size_;
 
-    vector<const NeuralNetwork&> winners= {};
-
-    for(int kernel_index = 0; kernel_index < number_of_kernels; kernel_index++){
-        for (vector<Competitor>::iterator competitor_iterator = winners_begin;
+    vector<NeuralNetwork*> winners= {};
+    for (vector<Competitor>::iterator competitor_iterator = winners_begin;
              competitor_iterator < winners_end;
              competitor_iterator++){
-            winners.push_back(competitor_iterator->network);
-        }
+            winners.push_back(&(competitor_iterator->network));
     }
 
     winner_.make_average_from(winners);
