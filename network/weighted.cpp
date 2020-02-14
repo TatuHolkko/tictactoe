@@ -1,8 +1,17 @@
 #include "weighted.h"
 
-Weighted::Weighted(int n)
+
+
+Weighted::Weighted():
+    weights_({})
 {
-    weights_ = vector<float>(n, 0);
+
+}
+
+Weighted::Weighted(int n):
+    weights_(vector<float>(n, 0))
+{
+
 }
 
 void Weighted::randomize(const float& scale)

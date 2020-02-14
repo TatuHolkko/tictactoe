@@ -12,6 +12,11 @@ using namespace std;
 class Weighted
 {
 public:
+
+    //initialize withn no weights
+    Weighted();
+
+    //intialize the weight vector with n zeros
     Weighted(int n);
 
     //uniformly randomize all weights from -<scale> to <scale>
