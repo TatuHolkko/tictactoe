@@ -17,13 +17,12 @@ NeuralNetwork::NeuralNetwork():
     rand_eng_ = default_random_engine(seed);
 }
 
-NeuralNetwork::NeuralNetwork(const NeuralNetwork& other, const vector<vector<Cell>>& board)
-{
+NeuralNetwork::NeuralNetwork(const NeuralNetwork& other, const vector<vector<Cell>>& board):
     NeuralNetwork(board,
                   other.get_kernel_radius(),
                   other.get_number_of_kernels(),
-                  other.get_hidden_layer_size());
-
+                  other.get_hidden_layer_size())
+{
     make_equal_to(other);
 }
 
@@ -151,7 +150,7 @@ void NeuralNetwork::mutate(float scale)
     }
 }
 
-void NeuralNetwork::make_equal_to(const NeuralNetwork &other)
+void NeuralNetwork::make_equal_to(const NeuralNetwork& other)
 {
     //kernels
     vector<KernelMaster*>::iterator own_kernel = kernels_.begin();

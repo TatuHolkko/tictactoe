@@ -30,7 +30,7 @@ int main()
 {
     filehandler fh;
     Game gm = Game(4, 3);
-    NeuralNetwork nn(*(gm.get_board()),1,3,18);
+    NeuralNetwork nn(*(gm.get_board()),1,1,18);
     //NeuralNetwork nn;
     //fh.load(nn, "../tictactoe/nnfiles/train-hidden18-mut1-gen840.nn", *(gm.get_board()));
     Trainer trainer(nn, 30, gm, 0.1, 100, 3);
