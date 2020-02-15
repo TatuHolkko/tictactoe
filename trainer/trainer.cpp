@@ -25,17 +25,24 @@ Trainer::Trainer(NeuralNetwork &ancestor,
     network_pool_.reserve(pool_size);
 
     for (int i = 0; i < pool_size; i++){
-        Competitor comp ={NeuralNetwork(ancestor), 0};
+        Competitor comp = {new NeuralNetwork(ancestor, *(game.get_board())), 0};
         if (randomize){
-            comp.network.randomize();
+            comp.network->randomize();
         }
         network_pool_.push_back(comp);
     }
-    winner_ = NeuralNetwork(ancestor);
+    winner_ = NeuralNetwork(ancestor, *(game.get_board()));
 
     if (randomize){
         score_all();
         pick_winner();
+    }
+}
+
+Trainer::~Trainer()
+{
+    for(Competitor comp : network_pool_){
+        delete comp.network;
     }
 }
 
@@ -106,11 +113,11 @@ void Trainer::copy_and_mutate_all()
         comp++){
 
         comp->score = 0;
-        comp->network.make_equal_to(winner_);
+        comp->network->make_equal_to(winner_);
         //leave first network unaltered so that there is at least one copy
         //of the winner in the pool
         if (comp != network_pool_.begin()){
-            comp->network.mutate(mutation_scale_);
+            comp->network->mutate(mutation_scale_);
         }
     }
 }
@@ -130,7 +137,7 @@ void Trainer::score_all()
             if (opponent != player){
                 for (int match = 0; match < matches_per_opponent_; match++){
 
-                    play_match(player->network, opponent->network);
+                    play_match(*(player->network), *(opponent->network));
                     score_players(*player, *opponent);
 
                     total_matches++;
@@ -246,7 +253,7 @@ void Trainer::pick_winner()
     for (vector<Competitor>::iterator competitor_iterator = winners_begin;
              competitor_iterator < winners_end;
              competitor_iterator++){
-            winners.push_back(&(competitor_iterator->network));
+            winners.push_back(competitor_iterator->network);
     }
 
     winner_.make_average_from(winners);

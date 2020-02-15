@@ -47,6 +47,8 @@ public:
             bool randomize=false,
             bool start_random=true);
 
+   ~Trainer();
+
     /* iterate <n> generations of evolutionary progress
      *
      * In a single iteration the entire pool of neural networks
@@ -75,7 +77,7 @@ private:
      */
     struct Competitor
     {
-        NeuralNetwork network;
+        NeuralNetwork* network;
         int score;
         bool operator <(const Competitor& rhs){
             return this->score < rhs.score;
