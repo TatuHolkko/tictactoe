@@ -42,10 +42,10 @@ public:
     void make_average_from(const vector<const Weighted*>& objects);
 
     //return the weight at the given index
-    const float& weight_at(int i);
+    const float& weight_at(int i) const;
 
     //return the number of weights
-    int size();
+    int size() const;
 
 protected:
     vector<float> weights_;

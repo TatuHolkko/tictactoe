@@ -40,7 +40,7 @@ void Weighted::set_weights(const vector<float>& weights)
         throw "Can not set weights, because argument vector is too small.";
     }
     vector<float>::iterator self_iterator = weights_.begin();
-    vector<float>::iterator other_iterator = weights.begin();
+    vector<float>::const_iterator other_iterator = weights.begin();
 
     while(self_iterator != weights_.end()){
         *self_iterator = *other_iterator;
@@ -49,13 +49,13 @@ void Weighted::set_weights(const vector<float>& weights)
     }
 }
 
-const vector<float>& get_weights() const {
+const vector<float>& Weighted::get_weights() const {
     return weights_;
 }
 
 void Weighted::set_equal(const Weighted& target)
 {
-    vector<float>& target_weights = target.get_weights();
+    const vector<float>& target_weights = target.get_weights();
     if (target_weights.size() != weights_.size()){
         throw "Can not copy weights, because target object has different number of weights";
     }
@@ -66,13 +66,14 @@ void Weighted::make_average_from(const vector<const Weighted*>& objects)
 {
     vector<float> average_weights = {};
     float sum = 0;
-    int number_of_weights = objects.begin().size();
+    const Weighted* first = *(objects.begin());
+    int number_of_weights = first->size();
     //for each weight
     for(int weight_index = 0; weight_index < number_of_weights; weight_index++){
         sum = 0;
         //average the same weight from all objects
-        for(const Weighted& object : objects){
-            sum += object.weight_at(weight_index);
+        for(const Weighted* object : objects){
+            sum += object->weight_at(weight_index);
         }
         average_weights.push_back(sum / objects.size());
     }
@@ -80,12 +81,12 @@ void Weighted::make_average_from(const vector<const Weighted*>& objects)
     set_weights(average_weights);
 }
 
-const float& Weighted::weight_at(int i)
+const float& Weighted::weight_at(int i) const
 {
     return weights_.at(i);
 }
 
-int Weighted::size()
+int Weighted::size() const
 {
     return weights_.size();
 }
