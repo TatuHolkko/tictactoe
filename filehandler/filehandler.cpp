@@ -26,25 +26,25 @@ bool filehandler::save(const NeuralNetwork &nn, const string& path)
         return false;
     }
 
-    for (const Weighted& kernel : nn.get_kernels()){
+    for (const Weighted* kernel : nn.get_kernels()){
         output << LABEL_KERNEL;
-        for (float value : kernel.get_weights()){
+        for (float value : kernel->get_weights()){
             output << ";" << value;
         }
         output << endl;
     }
 
-    for (const Weighted& hidden_neuron : nn.get_hidden_layer()){
+    for (const Weighted* hidden_neuron : nn.get_hidden_layer()){
         output << LABEL_NEURON;
-        for (float value : hidden_neuron.get_weights()){
+        for (float value : hidden_neuron->get_weights()){
             output << ";" << value;
         }
         output << endl;
     }
 
-    for (const Weighted& output_neuron : nn.get_output_layer()){
+    for (const Weighted* output_neuron : nn.get_output_layer()){
         output << LABEL_OUTPUT;
-        for (float value : output_neuron.get_weights()){
+        for (float value : output_neuron->get_weights()){
             output << ";" << value;
         }
         output << endl;

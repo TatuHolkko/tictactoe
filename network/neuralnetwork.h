@@ -27,6 +27,8 @@ public:
                   const vector<vector<float>>& kernels,
                   const vector<vector<float>>& hidden_layer_weights,
                   const vector<vector<float>>& output_weights);
+
+    ~NeuralNetwork();
     //initialize weights from weight vectors
     void set_weights(const vector<vector<float> >& kernels,
                      const vector<vector<float> >& hidden_layer_weights,
@@ -54,9 +56,9 @@ public:
     int get_kernel_radius() const;
     int get_kernel_side() const;
     int get_hidden_layer_size() const;
-    const vector<KernelMaster>& get_kernels() const;
-    const vector<IndependentNeuron>& get_hidden_layer() const;
-    const vector<IndependentNeuron>& get_output_layer() const;
+    const vector<KernelMaster*>& get_kernels() const;
+    const vector<IndependentNeuron*>& get_hidden_layer() const;
+    const vector<IndependentNeuron*>& get_output_layer() const;
 
     bool REMOVE_OUTPUT_BIAS = true;
 
@@ -93,16 +95,16 @@ private:
     //number of neurons in the hidden layer
     int hidden_layer_size_ = 0;
     //kernelmaster for each unique kernel
-    vector<KernelMaster> kernels_ = {};
+    vector<KernelMaster*> kernels_ = {};
 
     //vector of all kernel instances for each postion and orientation
     //of a kernel master
     vector<Neuron*> kernel_instances_ = {};
 
     //hidden layer
-    vector<IndependentNeuron> hidden_layer_ = {};
+    vector<IndependentNeuron*> hidden_layer_ = {};
     //output layer
-    vector<IndependentNeuron> output_layer_ = {};
+    vector<IndependentNeuron*> output_layer_ = {};
     //normal distribution used by the random_normal function
     normal_distribution<double> norm_dist_ = normal_distribution<double>(0.0,1.0);
     default_random_engine rand_eng_;
