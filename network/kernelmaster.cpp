@@ -3,10 +3,10 @@
 #include <cmath>
 
 KernelMaster::KernelMaster(int radius):
-    radius_(radius)
+    radius_(radius),
+    Weighted(pow(2 * radius + 1, 2))
 {
-    int side = 2 * radius + 1;
-    Weighted(pow(side, 2));
+
 }
 
 KernelMaster::~KernelMaster()
