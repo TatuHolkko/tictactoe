@@ -31,7 +31,7 @@ Trainer::Trainer(NeuralNetwork &ancestor,
         }
         network_pool_.push_back(comp);
     }
-    winner_ = NeuralNetwork(ancestor, *(game.get_board()));
+    winner_ = new NeuralNetwork(ancestor, *(game.get_board()));
 
     if (randomize){
         score_all();
@@ -44,6 +44,8 @@ Trainer::~Trainer()
     for(Competitor comp : network_pool_){
         delete comp.network;
     }
+
+    delete winner_;
 }
 
 void Trainer::iterate(int n)
@@ -60,7 +62,7 @@ void Trainer::iterate(int n)
 
 const NeuralNetwork& Trainer::get_winner() const
 {
-    return winner_;
+    return *winner_;
 }
 
 void Trainer::play_winner()
@@ -75,7 +77,7 @@ void Trainer::play_winner()
             move = get_move_cli();
         } else {
             vector<float> output = {};
-            winner_.make_move(output);
+            winner_->make_move(output);
             move = get_move(output);
         }
 
@@ -98,7 +100,7 @@ void Trainer::play_winner()
 
 void Trainer::showcase_winner()
 {
-    play_match(winner_, winner_, true);
+    play_match(*winner_, *winner_, true);
 }
 
 void Trainer::set_generation(int generation)
@@ -113,7 +115,7 @@ void Trainer::copy_and_mutate_all()
         comp++){
 
         comp->score = 0;
-        comp->network->make_equal_to(winner_);
+        comp->network->make_equal_to(*winner_);
         //leave first network unaltered so that there is at least one copy
         //of the winner in the pool
         if (comp != network_pool_.begin()){
@@ -256,7 +258,7 @@ void Trainer::pick_winner()
             winners.push_back(competitor_iterator->network);
     }
 
-    winner_.make_average_from(winners);
+    winner_->make_average_from(winners);
 }
 
 pair<int, int> Trainer::get_move_cli()

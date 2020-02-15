@@ -84,7 +84,7 @@ private:
         }
     };
     //average network of the last iterations top scoring networks
-    NeuralNetwork winner_;
+    NeuralNetwork* winner_;
     //pool of neural networks that compete against each other
     vector<Competitor> network_pool_;
     //pointer to the game to be used

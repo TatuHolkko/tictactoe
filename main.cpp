@@ -33,7 +33,7 @@ int main()
     NeuralNetwork nn(*(gm.get_board()),1,1,18);
     //NeuralNetwork nn;
     //fh.load(nn, "../tictactoe/nnfiles/train-hidden18-mut1-gen840.nn", *(gm.get_board()));
-    Trainer trainer(nn, 30, gm, 0.1, 100, 3);
+    Trainer trainer(nn, 2, gm, 0.1, 100, 3);
     trainer.set_generation(840);
     for (int i = 0; i < 10000; i++){
         trainer.iterate(1);
