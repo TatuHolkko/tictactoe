@@ -138,6 +138,11 @@ vector<vector<int>> Game::get_board(const int friendly_unit) const
     return result;
 }
 
+const vector<vector<Cell>>* Game::get_board() const
+{
+    return &(board_);
+}
+
 void Game::print() const {
     for (vector<Cell> row : board_){
         for (Cell cell : row){
