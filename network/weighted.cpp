@@ -31,7 +31,7 @@ void Weighted::mutate(const float& scale)
 const float& Weighted::add_weight(const float& value)
 {
     weights_.push_back(value);
-    return &(weights_.end());
+    return *(weights_.end());
 }
 
 void Weighted::set_weights(const vector<float>& weights)

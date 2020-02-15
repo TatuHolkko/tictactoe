@@ -7,7 +7,7 @@ IndependentNeuron::IndependentNeuron()
 
 void IndependentNeuron::connect(const INode &to, const float &weight)
 {
-    float& new_weight = add_weight(weight);
+    const float& new_weight = add_weight(weight);
     Neuron::connect(to, new_weight);
 }
 
