@@ -1,5 +1,5 @@
-/* this is a module for objects that hold an array of floats (weights)
- * that can be mutated and randomized
+/* this is a module for objects that hold an array of floats (weights
+ * and a bias) that can be mutated and randomized
  */
 #ifndef WEIGHTED_H
 #define WEIGHTED_H
@@ -32,11 +32,17 @@ public:
     //elements as weights of this Weighted object.
     void set_weights(const vector<float>& weights);
 
-    //copy all weight values from <target> to this object
+    //set the bias
+    void set_bias(const float& value);
+
+    //copy all weight values and bias from <target> to this object
     void set_equal(const Weighted& target);
 
     //get weights
     const vector<float>& get_weights() const;
+
+    //get bias
+    const float& get_bias() const;
 
     //set this object's weights equal to the average of the parameter objects' weights
     void make_average_from(const vector<const Weighted*>& objects);
@@ -49,6 +55,8 @@ public:
 
 protected:
     vector<float> weights_;
+
+    float bias_;
 
 private:
     //normal distribution used by the random_normal function

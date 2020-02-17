@@ -3,13 +3,15 @@
 
 
 Weighted::Weighted():
-    weights_({})
+    weights_({}),
+    bias_(0)
 {
 
 }
 
 Weighted::Weighted(int n):
-    weights_(vector<float>(n, 0))
+    weights_(vector<float>(n, 0)),
+    bias_(0)
 {
 
 }
@@ -19,6 +21,8 @@ void Weighted::randomize(const float& scale)
     for (float& weight : weights_){
         weight = random_uniform() * scale;
     }
+
+    bias_ = random_uniform() * scale;
 }
 
 void Weighted::mutate(const float& scale)
@@ -26,6 +30,8 @@ void Weighted::mutate(const float& scale)
     for (float& weight : weights_){
         weight += random_normal() * scale;
     }
+
+    bias_ += random_normal() * scale;
 }
 
 const float& Weighted::add_weight(const float& value)
@@ -49,8 +55,18 @@ void Weighted::set_weights(const vector<float>& weights)
     }
 }
 
+void Weighted::set_bias(const float& value)
+{
+    bias_ = value;
+}
+
 const vector<float>& Weighted::get_weights() const {
     return weights_;
+}
+
+const float&Weighted::get_bias() const
+{
+    return bias_;
 }
 
 void Weighted::set_equal(const Weighted& target)
@@ -60,6 +76,7 @@ void Weighted::set_equal(const Weighted& target)
         throw "Can not copy weights, because target object has different number of weights";
     }
     set_weights(target_weights);
+    set_bias(target.get_bias());
 }
 
 void Weighted::make_average_from(const vector<const Weighted*>& objects)
@@ -79,6 +96,13 @@ void Weighted::make_average_from(const vector<const Weighted*>& objects)
     }
 
     set_weights(average_weights);
+
+    //for bias
+    sum = 0;
+    for(const Weighted* object : objects){
+        sum += object->get_bias();
+    }
+    set_bias(sum / objects.size());
 }
 
 const float& Weighted::weight_at(int i) const
