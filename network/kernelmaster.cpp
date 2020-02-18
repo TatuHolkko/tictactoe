@@ -37,7 +37,7 @@ Neuron& KernelMaster::create_kernel(const vector<vector<Cell>>& board, int x, in
     if (x - radius_ < 0 || x + radius_ >= board_side || y - radius_ < 0 || y + radius_ >= board_side){
         throw "Cannot create kernel instance at " + std::to_string(x) + ", " + std::to_string(y);
     }
-    Neuron* neuron = new Neuron();
+    Neuron* neuron = new Neuron(bias_);
     int weight_index = 0;
     for(int dy = -radius_; dy <= radius_; dy++){
         for(int dx = -radius_; dx <= radius_; dx++){

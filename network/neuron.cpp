@@ -1,7 +1,8 @@
 #include "neuron.h"
 #include "node.h"
 
-Neuron::Neuron()
+Neuron::Neuron(const float& value):
+    bias_(&value)
 {
 
 }
@@ -34,7 +35,7 @@ void Neuron::update()
     }
     //optionally add bias and pass the value through activation function
     if (bias_enabled_){
-        value_ = activation_function(sum + bias_);
+        value_ = activation_function(sum + *bias_);
     } else {
         value_ = activation_function(sum);
     }

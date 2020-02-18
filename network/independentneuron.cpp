@@ -1,6 +1,8 @@
 #include "independentneuron.h"
 
-IndependentNeuron::IndependentNeuron()
+IndependentNeuron::IndependentNeuron():
+    Weighted(),
+    Neuron(Weighted::bias_)
 {
 
 }
