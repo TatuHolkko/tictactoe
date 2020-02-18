@@ -3,8 +3,8 @@
 #include <cmath>
 
 KernelMaster::KernelMaster(int radius):
-    radius_(radius),
-    Weighted(pow(2 * radius + 1, 2))
+    Weighted(pow(2 * radius + 1, 2)),
+    radius_(radius)
 {
 
 }
