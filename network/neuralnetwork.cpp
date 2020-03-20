@@ -10,171 +10,171 @@ NeuralNetwork::NeuralNetwork():
     kernel_side_(0),
     hidden_layer_size_(0),
     kernels_({}),
-    hidden_layer_weights_({}),
-    output_weights_({})
+    hidden_layer_({}),
+    output_layer_({})
 {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     rand_eng_ = default_random_engine(seed);
 }
 
-NeuralNetwork::NeuralNetwork(int grid_diameter,
+NeuralNetwork::NeuralNetwork(const NeuralNetwork& other, const vector<vector<Cell>>& board):
+    NeuralNetwork(board,
+                  other.get_kernel_radius(),
+                  other.get_number_of_kernels(),
+                  other.get_hidden_layer_size())
+{
+    make_equal_to(other);
+}
+
+NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
                              int kernel_radius,
-                             int hidden_neurons,
-                             int number_of_kernels):
-    grid_diameter_(grid_diameter),
+                             int number_of_kernels,
+                             int hidden_neurons):
+    grid_diameter_(board.size()),
     number_of_kernels_(number_of_kernels),
     kernel_radius_(kernel_radius),
     kernel_side_(2*kernel_radius + 1),
     hidden_layer_size_(hidden_neurons)
 {
-    //initialize weights to zero
     for (int i = 0; i < number_of_kernels; i++){
-        vector<float> kernel(pow(kernel_side_, 2) + 1, 0);
-        kernels_.push_back(kernel);
+        KernelMaster* master = new KernelMaster(kernel_radius);
+        master->create_kernels(kernel_instances_, board);
+        kernels_.push_back(master);
     }
-    for (int neuron = 0; neuron < hidden_neurons; neuron++){
-        vector<float> convoluted_inputs(pow(grid_diameter - 2*kernel_radius, 2)*number_of_kernels + 1, 0);
-        hidden_layer_weights_.push_back(convoluted_inputs);
+
+    for (int i = 0; i < hidden_neurons; i++){
+        IndependentNeuron* neuron = new IndependentNeuron();
+        for (Neuron* kernel : kernel_instances_){
+            neuron->connect(*kernel, 0);
+        }
+        hidden_layer_.push_back(neuron);
     }
-    for (int output = 0; output < pow(grid_diameter,2); output++){
-        vector<float> hidden_layer_output(hidden_neurons + 1, 0);
-        output_weights_.push_back(hidden_layer_output);
+
+    for (int i = 0; i < pow(grid_diameter_,2); i++){
+        IndependentNeuron* output = new IndependentNeuron();
+        for (Neuron* hidden_neuron : hidden_layer_){
+            output->connect(*hidden_neuron, 0);
+        }
+        output_layer_.push_back(output);
     }
 }
 
-NeuralNetwork::NeuralNetwork(const vector<vector<float>>& kernels,
+NeuralNetwork::NeuralNetwork(const vector<vector<Cell>>& board,
+                             const vector<vector<float>>& kernels,
                              const vector<vector<float>>& hidden_layer_weights,
-                             const vector<vector<float>>& output):
-    NeuralNetwork()
+                             const vector<vector<float>>& output_weights)
 {
-    initialize_from(kernels, hidden_layer_weights, output);
+    int kernel_radius = floor(sqrt(kernels.at(0).size()) / 2);
+    int number_of_kernels = kernels.size();
+    int hidden_neurons = hidden_layer_weights.size();
+
+    NeuralNetwork(board, kernel_radius, number_of_kernels, hidden_neurons);
+
+    set_weights(kernels, hidden_layer_weights, output_weights);
 }
 
-void NeuralNetwork::initialize_from(const vector<vector<float>>& kernels,
+NeuralNetwork::~NeuralNetwork()
+{
+    for (KernelMaster* master : kernels_){
+        delete master;
+    }
+
+    for (IndependentNeuron* hidden : hidden_layer_){
+        delete hidden;
+    }
+
+    for (IndependentNeuron* output : output_layer_){
+        delete output;
+    }
+}
+
+void NeuralNetwork::set_weights(const vector<vector<float>>& kernels,
                                     const vector<vector<float>>& hidden_layer_weights,
                                     const vector<vector<float>>& output_weights)
 {
-    grid_diameter_ = sqrt(output_weights.size());
-    number_of_kernels_ = kernels.size();
-    kernel_radius_ = floor(sqrt(kernels.at(0).size())/2);
-    kernel_side_ = 2*kernel_radius_ + 1;
-    hidden_layer_size_ = hidden_layer_weights.size();
-    kernels_ = kernels;
-    hidden_layer_weights_ = hidden_layer_weights;
-    output_weights_ = output_weights;
+    for(unsigned int i = 0; i < kernels_.size(); i++){
+        KernelMaster* master = kernels_.at(i);
+        master->set_weights(kernels.at(i));
+    }
+
+    for(unsigned int i = 0; i < hidden_layer_.size(); i++){
+        IndependentNeuron* hidden_neuron = hidden_layer_.at(i);
+        hidden_neuron->set_weights(hidden_layer_weights.at(i));
+    }
+
+    for(unsigned int i = 0; i < output_layer_.size(); i++){
+        IndependentNeuron* output_neuron = output_layer_.at(i);
+        output_neuron->set_weights(output_weights.at(i));
+    }
 }
 
 void NeuralNetwork::randomize(){
-    vector<vector<float>>::iterator it1;
-    vector<float>::iterator it2;
-    for (it1 = kernels_.begin(); it1 < kernels_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_number();
-        }
+
+    for(KernelMaster* kernel : kernels_){
+        kernel->randomize(1);
     }
-    for (it1 = hidden_layer_weights_.begin(); it1 < hidden_layer_weights_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_number();
-        }
+    for(IndependentNeuron* neuron : hidden_layer_){
+        neuron->randomize(1);
     }
-    for (it1 = output_weights_.begin(); it1 < output_weights_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 = random_number();
-        }
+    for(IndependentNeuron* output : output_layer_){
+        output->randomize(1);
     }
 }
 
-vector<float> NeuralNetwork::make_move(const vector<vector<int>> &game_grid) const
+void NeuralNetwork::make_move(vector<float>& output)
 {
-    vector<float> convoluted_inputs;
-    convoluted_inputs.reserve(number_of_kernels_ * pow(grid_diameter_ - 2*kernel_radius_, 2));
-
-    for (int kernel_index = 0; kernel_index < number_of_kernels_; kernel_index++){
-        for (int x = kernel_radius_; x < grid_diameter_ - kernel_radius_; x++){
-            for (int y = kernel_radius_; y < grid_diameter_ - kernel_radius_; y++){
-                float kernel_sum = apply_kernel(game_grid,
-                                                kernels_.at(kernel_index),
-                                                kernel_radius_,
-                                                x,
-                                                y);
-                float bias = kernels_.at(kernel_index).back();
-                convoluted_inputs.push_back(activation_function(kernel_sum + bias));
-            }
-        }
+    for(Neuron* kernel_instance : kernel_instances_){
+        kernel_instance->update();
     }
 
-    vector<float> hidden_activations;
-    hidden_activations.reserve(hidden_layer_size_);
-    for (int neuron = 0; neuron < hidden_layer_size_; neuron++){
-        int sum = 0;
-        for (vector<float>::size_type input = 0; input < convoluted_inputs.size(); input++){
-            sum += convoluted_inputs.at(input) * hidden_layer_weights_.at(neuron).at(input);
-        }
-        float bias = hidden_layer_weights_.at(neuron).back();
-        hidden_activations.push_back(activation_function(sum + bias));
+    for(Neuron* hidden_node : hidden_layer_){
+        hidden_node->update();
     }
 
-    vector<float> outputs;
-    int amount_of_cells = pow(grid_diameter_, 2);
-    outputs.reserve(amount_of_cells);
-    for (int output = 0; output < amount_of_cells; output++){
-        int sum = 0;
-        for (int hidd_neur = 0; hidd_neur < hidden_layer_size_; hidd_neur++){
-            sum += hidden_activations.at(hidd_neur) * output_weights_.at(output).at(hidd_neur);
-        }
-        if (REMOVE_OUTPUT_BIAS){
-            outputs.push_back(activation_function(sum));
-        } else {
-            float bias = output_weights_.at(output).back();
-            outputs.push_back(activation_function(sum + bias));
-        }
+    for(Neuron* output_node : output_layer_){
+        output_node->update();
+        output.push_back(output_node->value());
     }
-    return outputs;
 }
 
 void NeuralNetwork::mutate(float scale)
 {
-    vector<vector<float>>::iterator it1;
-    vector<float>::iterator it2;
-    for (it1 = kernels_.begin(); it1 < kernels_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 += random_normal() * scale;
-        }
+    for(KernelMaster* kernel : kernels_){
+        kernel->mutate(scale);
     }
-    for (it1 = hidden_layer_weights_.begin(); it1 < hidden_layer_weights_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 += random_normal() * scale;
-        }
+    for(IndependentNeuron* neuron : hidden_layer_){
+        neuron->mutate(scale);
     }
-    for (it1 = output_weights_.begin(); it1 < output_weights_.end(); it1++){
-        for (it2 = it1->begin(); it2 < it1->end(); it2++){
-            *it2 += random_normal() * scale;
-        }
+    for(IndependentNeuron* output : output_layer_){
+        output->mutate(scale);
     }
 }
 
-void NeuralNetwork::make_equal_to(const NeuralNetwork &other)
+void NeuralNetwork::make_equal_to(const NeuralNetwork& other)
 {
-    vector<vector<float>>::iterator own_weight = kernels_.begin();
-    vector<vector<float>>::const_iterator other_weight = other.get_kernel_weights().begin();
-    while(own_weight != kernels_.end()){
-        *own_weight = *other_weight;
-        own_weight++;
-        other_weight++;
+    //kernels
+    vector<KernelMaster*>::iterator own_kernel = kernels_.begin();
+    vector<KernelMaster*>::const_iterator other_kernel = other.get_kernels().begin();
+    while(own_kernel != kernels_.end()){
+        (*own_kernel)->set_equal(**other_kernel);
+        own_kernel++;
+        other_kernel++;
     }
-    own_weight = hidden_layer_weights_.begin();
-    other_weight = other.get_hidden_weights().begin();
-    while(own_weight != hidden_layer_weights_.end()){
-        *own_weight = *other_weight;
-        own_weight++;
-        other_weight++;
+    //hidden layer
+    vector<IndependentNeuron*>::iterator own_neuron = hidden_layer_.begin();
+    vector<IndependentNeuron*>::const_iterator other_neuron = other.get_hidden_layer().begin();
+    while(own_neuron != hidden_layer_.end()){
+        (*own_neuron)->set_equal(**other_neuron);
+        own_neuron++;
+        other_neuron++;
     }
-    own_weight = output_weights_.begin();
-    other_weight = other.get_output_weights().begin();
-    while(own_weight != output_weights_.end()){
-        *own_weight = *other_weight;
-        own_weight++;
-        other_weight++;
+    //output layer
+    own_neuron = output_layer_.begin();
+    other_neuron = other.get_output_layer().begin();
+    while(own_neuron != output_layer_.end()){
+        (*own_neuron)->set_equal(**other_neuron);
+        own_neuron++;
+        other_neuron++;
     }
 }
 
@@ -203,40 +203,73 @@ int NeuralNetwork::get_hidden_layer_size() const
     return hidden_layer_size_;
 }
 
-const vector<vector<float>>& NeuralNetwork::get_kernel_weights() const
+const vector<KernelMaster*>& NeuralNetwork::get_kernels() const
 {
     return kernels_;
 }
 
-const vector<vector<float>>& NeuralNetwork::get_hidden_weights() const
+const vector<IndependentNeuron*>& NeuralNetwork::get_hidden_layer() const
 {
-    return hidden_layer_weights_;
+    return hidden_layer_;
 }
 
-const vector<vector<float>>& NeuralNetwork::get_output_weights() const
+const vector<IndependentNeuron*>& NeuralNetwork::get_output_layer() const
 {
-    return output_weights_;
+    return output_layer_;
 }
 
-float NeuralNetwork::weight_at(int layer, int node, int weight) const
+void NeuralNetwork::make_average_from(const vector<NeuralNetwork*>& pool)
 {
-    if (layer == 0){
-        return kernels_.at(node).at(weight);
-    } else if (layer == 1) {
-        return hidden_layer_weights_.at(node).at(weight);
-    } else {
-        return output_weights_.at(node).at(weight);
+    int output_layer_size = pow(grid_diameter_, 2);
+
+    /* first index of these 2d vectors defines the neuron index in the layer,
+     * and second index defines the neural net of whom the actual neuron is
+     */
+    vector<vector<const Weighted*>> kernel_pool(number_of_kernels_, vector<const Weighted*>());
+    vector<vector<const Weighted*>> hidden_neuron_pool(hidden_layer_size_, vector<const Weighted*>());
+    vector<vector<const Weighted*>> output_neuron_pool(output_layer_size, vector<const Weighted*>());
+
+    //this index tells which neuron/kernel in the current network is to be added
+    int node_index = 0;
+
+    //collect all weighted objects (neurons) from all networks so that you can list
+    //the same neuron of all the networks
+    for (const NeuralNetwork* network : pool){
+        node_index = 0;
+        for (const Weighted* kernel : network->get_kernels()){
+            kernel_pool.at(node_index).push_back(kernel);
+            node_index++;
+        }
+
+        node_index = 0;
+        for(const Weighted* hidden_neuron : network->get_hidden_layer()){
+            hidden_neuron_pool.at(node_index).push_back(hidden_neuron);
+            node_index++;
+        }
+
+        node_index = 0;
+        for(const Weighted* output_neuron : network->get_output_layer()){
+            output_neuron_pool.at(node_index).push_back(output_neuron);
+            node_index++;
+        }
     }
-}
 
-void NeuralNetwork::set_weight_at(int layer, int node, int weight, float value)
-{
-    if (layer == 0){
-        kernels_.at(node).at(weight) = value;
-    } else if (layer == 1) {
-        hidden_layer_weights_.at(node).at(weight) = value;
-    } else {
-        output_weights_.at(node).at(weight) = value;
+    node_index = 0;
+    for (Weighted* kernel : kernels_){
+        kernel->make_average_from(kernel_pool.at(node_index));
+        node_index++;
+    }
+
+    node_index = 0;
+    for (Weighted* hidden_neuron : hidden_layer_){
+        hidden_neuron->make_average_from(hidden_neuron_pool.at(node_index));
+        node_index++;
+    }
+
+    node_index = 0;
+    for(Weighted* output_neuron : output_layer_){
+        output_neuron->make_average_from(output_neuron_pool.at(node_index));
+        node_index++;
     }
 }
 

@@ -9,7 +9,7 @@ using namespace std;
 class Neuron: public INode
 {
 public:
-    Neuron();
+    Neuron(const float& value);
 
     void update();
 
@@ -33,10 +33,13 @@ private:
     vector<Connection> connections_;
 
     //bias of the neuron
-    float bias_;
+    const float* bias_;
+
+    //if this is false, bias does not affect the activation
+    bool bias_enabled_ = true;
 
     //current activation value
-    float value_;
+    float value_ = 0;
 
 protected:
     //return the activation of this neuron for given sum from

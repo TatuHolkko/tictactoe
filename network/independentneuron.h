@@ -2,19 +2,18 @@
 #define INDEPENDENTNEURON_H
 
 #include "neuron.h"
+#include "weighted.h"
 
 using namespace std;
 
-class IndependentNeuron: public Neuron
+class IndependentNeuron: public Weighted, public Neuron
 {
 public:
     IndependentNeuron();
 
     void connect(const INode& to, const float& weight);
 
-private:
-
-    vector<float> weights_;
+    void set_weights(const vector<float>& weights);
 };
 
 #endif // INDEPENDENTNEURON_H

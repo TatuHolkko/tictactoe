@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     network/node.cpp \
     network/neuron.cpp \
     network/kernelmaster.cpp \
-    network/independentneuron.cpp
+    network/independentneuron.cpp \
+    network/weighted.cpp
 
 
 HEADERS += \
@@ -25,4 +26,5 @@ HEADERS += \
     network/node.h \
     network/neuron.h \
     network/kernelmaster.h \
-    network/independentneuron.h
+    network/independentneuron.h \
+    network/weighted.h

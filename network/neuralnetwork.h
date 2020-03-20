@@ -1,5 +1,10 @@
 #ifndef NEURALNETWORK_H
 #define NEURALNETWORK_H
+
+#include "kernelmaster.h"
+#include "neuron.h"
+#include "independentneuron.h"
+
 #include <vector>
 #include <string>
 #include <random>
@@ -11,28 +16,36 @@ class NeuralNetwork
 public:
     NeuralNetwork();
 
-    NeuralNetwork(int grid_diameter,
-                  int kernel_radius,
-                  int hidden_neurons,
-                  int number_of_kernels);
+    NeuralNetwork(const NeuralNetwork& other, const vector<vector<Cell>>& board);
 
-    NeuralNetwork(const vector<vector<float>>& kernels,
+    NeuralNetwork(const vector<vector<Cell>>& board,
+                  int kernel_radius,
+                  int number_of_kernels,
+                  int hidden_neurons);
+
+    NeuralNetwork(const vector<vector<Cell>>& board,
+                  const vector<vector<float>>& kernels,
                   const vector<vector<float>>& hidden_layer_weights,
                   const vector<vector<float>>& output_weights);
-    //initialize weights and attributes from weight vectors
-    void initialize_from(const vector<vector<float> >& kernels,
-                         const vector<vector<float> >& hidden_layer_weights,
-                         const vector<vector<float> >& output_weights);
+
+    ~NeuralNetwork();
+    //initialize weights from weight vectors
+    void set_weights(const vector<vector<float> >& kernels,
+                     const vector<vector<float> >& hidden_layer_weights,
+                     const vector<vector<float> >& output_weights);
     //randomize all weights between -1 and 1
     void randomize();
-    /* feed game board state to the network and calculate the output
-     * probability distribution where this network would place it's
-     * next unit
+    /* calculate the output probability distribution where this network would place it's
+     * next unit according to the current board state. the board needs to be from this
+     * networks point of view (meaning that this network's units must be represented with
+     * ones).
      *
-     * returns: a flattened distribution vector. if the board is n x m
+     * <output> an empty vector of floats where the result distribution will be stored
+     *
+     * returns: a flattened distribution vector as a reference parameter. if the board is n x m
      * matrix, the distribution vector will be a vector of length n*m
      */
-    vector<float> make_move(const vector<vector<int>>& game_grid) const;
+    void make_move(vector<float>& output);
     //nudge all weights randomly
     void mutate(float scale);
     //copy all weights from <other>
@@ -43,9 +56,9 @@ public:
     int get_kernel_radius() const;
     int get_kernel_side() const;
     int get_hidden_layer_size() const;
-    const vector<vector<float>>& get_kernel_weights() const;
-    const vector<vector<float>>& get_hidden_weights() const;
-    const vector<vector<float>>& get_output_weights() const;
+    const vector<KernelMaster*>& get_kernels() const;
+    const vector<IndependentNeuron*>& get_hidden_layer() const;
+    const vector<IndependentNeuron*>& get_output_layer() const;
 
     bool REMOVE_OUTPUT_BIAS = true;
 
@@ -64,6 +77,12 @@ public:
      */
     void set_weight_at(int layer, int node, int weight, float value);
 
+    /* Set this network's weights to equal the averages of the weights in <pool>
+     *
+     * <pool> list of NeuralNetworks that are averaged
+     */
+    void make_average_from(const vector<NeuralNetwork*>& pool);
+
 private:
     //game grid side length
     int grid_diameter_ = 0;
@@ -75,12 +94,17 @@ private:
     int kernel_side_ = 0;
     //number of neurons in the hidden layer
     int hidden_layer_size_ = 0;
-    //kernel weights for convolution
-    vector<vector<float>> kernels_ = {};
-    //hidden layer weights
-    vector<vector<float>> hidden_layer_weights_ = {};
-    //output weights
-    vector<vector<float>> output_weights_ = {};
+    //kernelmaster for each unique kernel
+    vector<KernelMaster*> kernels_ = {};
+
+    //vector of all kernel instances for each postion and orientation
+    //of a kernel master
+    vector<Neuron*> kernel_instances_ = {};
+
+    //hidden layer
+    vector<IndependentNeuron*> hidden_layer_ = {};
+    //output layer
+    vector<IndependentNeuron*> output_layer_ = {};
     //normal distribution used by the random_normal function
     normal_distribution<double> norm_dist_ = normal_distribution<double>(0.0,1.0);
     default_random_engine rand_eng_;

@@ -47,6 +47,8 @@ public:
             bool randomize=false,
             bool start_random=true);
 
+   ~Trainer();
+
     /* iterate <n> generations of evolutionary progress
      *
      * In a single iteration the entire pool of neural networks
@@ -75,14 +77,14 @@ private:
      */
     struct Competitor
     {
-        NeuralNetwork network;
+        NeuralNetwork* network;
         int score;
         bool operator <(const Competitor& rhs){
             return this->score < rhs.score;
         }
     };
     //average network of the last iterations top scoring networks
-    NeuralNetwork winner_;
+    NeuralNetwork* winner_;
     //pool of neural networks that compete against each other
     vector<Competitor> network_pool_;
     //pointer to the game to be used
@@ -110,8 +112,8 @@ private:
     //score all competitors against all others
     void score_all();
     //play a single game
-    void play_match(const NeuralNetwork& player1,
-                    const NeuralNetwork& player2,
+    void play_match(NeuralNetwork& player1,
+                    NeuralNetwork& player2,
                     bool print = false);
     /* change the scores of the last players according to the
      * state that the game was left after the last game finished
