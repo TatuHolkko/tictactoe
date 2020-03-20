@@ -235,6 +235,7 @@ void NeuralNetwork::make_average_from(const vector<NeuralNetwork*>& pool)
     //collect all weighted objects (neurons) from all networks so that you can list
     //the same neuron of all the networks
     for (const NeuralNetwork* network : pool){
+        node_index = 0;
         for (const Weighted* kernel : network->get_kernels()){
             kernel_pool.at(node_index).push_back(kernel);
             node_index++;
