@@ -224,8 +224,17 @@ pair<int, int> Trainer::get_move(const vector<float>& dist) const
         //keep track of all tiles that are checked to not be empty
         not_checked.at(placed_on) = 0;
 
-        if (std::accumulate(masked_dist.begin(), masked_dist.end(), 0) == 0){
-            //the prob dist given only contains non-zero elements in blocked cells,
+        //if masked_out is true the <dist> argument contains non-zero
+        //elements in only blocked cells
+        bool masked_out = true;
+        for (const float& probability : masked_dist){
+            if (probability > 0){
+                masked_out = false;
+                break;
+            }
+        }
+
+        if (masked_out){
             //set the dist to be equally likely on all tiles that have not yet
             //been checked
             masked_dist = not_checked;
