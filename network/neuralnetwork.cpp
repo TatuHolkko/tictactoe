@@ -172,7 +172,7 @@ void NeuralNetwork::make_equal_to(const NeuralNetwork& other)
     own_neuron = output_layer_.begin();
     other_neuron = other.get_output_layer().begin();
     while(own_neuron != output_layer_.end()){
-        *own_neuron = *other_neuron;
+        (*own_neuron)->set_equal(**other_neuron);
         own_neuron++;
         other_neuron++;
     }
